@@ -34,5 +34,4 @@ const assert = require('assert')
   for (let i in expected) {
     assert(postRs.data[i] === expected[i])
   }
-})
-
+})()

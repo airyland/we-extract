@@ -269,6 +269,7 @@ const extract = async function (html, options = {}) {
       }).map(line => {
         // 特殊符号可能会导致解析出 bug
         if (/var\s+msg_desc/.test(line)) {
+          line = line.replace(/`/g, "'")
           line = line.replace(/"/g, '`')
         }
         return line
@@ -382,7 +383,6 @@ const extract = async function (html, options = {}) {
      .replace(/</g, '&lt;')
      .replace(/>/g, '&gt;')
      .trim().substr(0, 140)
-     // console.log(processedContent)
      const digest = processedContent.split('WEEXTRACT').map(function(line) {
          return '<p>' + line + '</p>';
      }).join('')
