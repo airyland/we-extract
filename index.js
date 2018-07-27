@@ -20,6 +20,8 @@ const getError = function (code) {
 const extract = async function (html, options = {}) {
   const { shouldReturnRawMeta, shouldReturnContent } = Object.assign({}, defaultConfig, options)
 
+  let paramType = 'HTML' // 参数为 URL 还是 HTML
+
   let type = 'post'
   let hasCopyright = false
   let shareContentTpl
@@ -33,6 +35,7 @@ const extract = async function (html, options = {}) {
     if (!/http(s?):\/\/mp.weixin.qq.com/.test(html)) {
       return getError(2009)
     }
+    paramType = 'URL'
     try {
       html = await request({
         uri: html,
@@ -56,7 +59,7 @@ const extract = async function (html, options = {}) {
   }
 
   if (html.includes('访问过于频繁') && !html.includes('js_content')) {
-    return getError(1004)
+    return paramType === 'URL' ? getError(1004) : getError(2010)
   } else if (html.includes('链接已过期') && !html.includes('js_content')) {
     return getError(2002)
   } else if (html.includes('被投诉且经审核涉嫌侵权，无法查看')) {
