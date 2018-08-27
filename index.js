@@ -407,19 +407,34 @@ const extract = async function (html, options = {}) {
     }
   }
 
+  // 使用图片作为 cover
+  if (type === 'image' && !post.msg_cover) {
+    const image = $('#img_list > img').eq(0).attr('src')
+    if (image) {
+      post.msg_cover = image
+    }
+  }
+
   if (/document\.write/.test(post.msg_content)) {
     const reg = /<script[\s\S]*?>([\s\S]*?)<\/script>/
+
     const rs = post.msg_content.match(reg)
     const script = rs[0]
-    if (type === 'voice' && /document\.write/.test(script)) {
+
+    if ((type === 'voice' || type === 'image') && /document\.write/.test(script)) {
       try {
-        const code = new Function(script.split('\n')
+        const code = script
+        .split('.replace')[0]
+        .split('\n')
         .filter(one => !one.includes('<script') && !one.includes('script>'))
         .join('\n')
-        .replace('document.write', 'return '))
-        post.msg_content = post.msg_content.replace(reg, code())
+        .replace('document.write', 'return ') + ')'
+
+        const fn = new Function(code)
+        post.msg_content = post.msg_content.replace(reg, fn()).trim().replace(/\n/g,"<br>")
       } catch (e) {
-        return getError(1005)
+        // 此处在 v1.2.0 之后不报错，因为不影响整体流程
+        // return getError(1005)
       }
     }
   }

@@ -3,7 +3,7 @@ const assert = require('assert')
 const fs = require('fs')
 
 ;(async function () {
-  const url = 'http://mp.weixin.qq.com/s?__biz=MjM5NjM4MDAxMg==&amp;mid=2655078412&amp;idx=1&amp;sn=9a0a54f2e7c8ac4019812aa78bd4b3e0&amp;chksm=bd5fc40f8a284d19360e956074ffced37d8e2d78cb01a4ecdfaae40247823e7056b9d31ae3ef#rd'
+  const url = fs.readFileSync('./links/post.html', 'utf-8')
   const postRs = await extract(url, {
     shouldReturnContent: false
   })
@@ -40,4 +40,10 @@ const fs = require('fs')
   const res001 = await extract(link001)
   console.log(res001)
   assert(res001.code === 2010)
+
+  const imageUrl = fs.readFileSync('./links/image.html', 'utf-8')
+  const imageRs = await extract(imageUrl)
+
+  console.log(imageRs)
+
 })()

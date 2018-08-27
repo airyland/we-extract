@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+
+
+        <script nonce="278851173" type="text/javascript">
+            window.logs = {
+                pagetime: {}
+            };
+            window.logs.pagetime['html_begin'] = (+new Date());
+        </script>
+        <title>小道消息</title>
+        
+<style>html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{line-height:1.6;font-family:-apple-system-font,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:16px}body,h1,h2,h3,h4,h5,p,ul,ol,dl,dd,fieldset,textarea{margin:0}fieldset,legend,textarea,input,button{padding:0}button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;*font-family:-apple-system-font,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif}ul,ol{padding-left:0;list-style-type:none}a img,fieldset{border:0}a{text-decoration:none}.flex_context{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center}.flex_bd{-webkit-box-flex:1;-webkit-flex:1;flex:1;word-wrap:break-word;word-break:break-all}.rich_media_global_msg{position:fixed;top:0;left:0;right:0;padding:.85em 35px .85em 15px;z-index:2;background-color:#c6e0f8;color:#888;font-size:12px}.rich_media_global_msg .icon_closed{position:absolute;right:15px;top:50%;margin-top:-5px;line-height:300px;overflow:hidden;-webkit-tap-highlight-color:rgba(0,0,0,0);background:transparent url(//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/icon_appmsg_msg_closed_sprite.2x2eb52b.png) no-repeat 0 0;width:11px;height:11px;vertical-align:middle;display:inline-block;-webkit-background-size:100% auto;background-size:100% auto}.rich_media_global_msg .icon_closed:active{background-position:0 -17px}.rich_media_global_msg.voice{color:#1aad19;background-color:#e8f6e8;padding-left:43.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rich_media_global_msg.voice .ic_voice{position:absolute;top:50%;margin-top:-10px;left:15px;display:inline-block;width:13.3px;height:18.3px;background:url(data:image/png;base64,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) no-repeat center;background-size:contain}.rich_media_global_msg.voice .icon_more{position:absolute;right:15px;top:50%;margin-top:-6.5px;width:8px;height:13px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAmCAYAAADeB1slAAAAAXNSR0IArs4c6QAAA49JREFUSA2tVk1IVFEUPveOmhQk1ibfvLFZSJtACqJIIpCIoB+imcFV2Z9ZUVnRomgRGFn2i6mFf5XVotCZMYmgIMhlq6BFENFiwjfPAosgFzXOvNu5o3fmeue98Y16F3PP+c453/fu/xCQmvZSWwwJaC0G6P8WND9IoTmbVFRycpqAdgBWkwRo94V960RsPn1aoPpN9RI6CR0WsDWcjAErtUiqTR/S18+HnNcSTv5zYrwDSatVMgLkH6aciwfj79WYW5+OT4xfsyPnBIgvwt872qBW45ZQzaMlJXCfMPJbDQgfRUoIhduVUW2TwArpaWyX+bnYU9JAAH44FaJIccqCW76Ib7NTjhOOvFPN/8q/IvE3cR+npFJgao9rkiSUXjD2GCNqzMnPbNPYjth3mqINlJAvTsk4kiJmWa3eQe8WpxwVzwjwgFFn/CorL29EkY9qovC5CFDrKq7JVoHl6zNTJCf53/lLk78SN/FcbJRx2cZCixC4ZATGXsu4as8YgQjGamN/q5atOotn4K3A1J4BUMbgsh7Wt6sx2bcV4AkjtSPJxkDjRQL0hVwg21zEglSzN+rdKeOybTtFcgK39ajWZDFWr+IZHxfGQ8mV0YA5nMGmDVcCPNcb8R5gYJ1UCWQfp6PFCI4NyZhrAV6EIiHGrPOAB0ImkW2c0la8u8ICc0wUCWrvC1dsw+3TnN6uanDaJ4zeiIfiA9wtWIAX8XspxeA6iuBlaN88hNzCNXk+JwFOuXJYW5tMQmc+EcqgzXGb2n9XFk1NstX5yKczl89JAF+6vRaBM1m5XAu//qkRGrtb8BThTtqH2/V0LmUWwbvsiREw8X0vcJHxxNbjNm3KUuVaMjmPFuWm2CPesHc/kp+yj06hFMhj/PIOOcfVFLk6xZT0G3vMTpmc27MusityZk/OBfKOwA05MPLIDJn3OJldcxTQotpBYOyEXVEWIw/NoInvuHOznSJfVDs0GzneNw9mI+eyOSPQI9phfCqPO38TFhHaFw/Eu/LliNiMESB5w6zkzD05F8mMYJr8mFC263Fa+vAadvXloj4toEcrjlgMjgrQrseHpBcfkm67WD6M6MN6lTWZeoZjyYxGLcB57MGnsEfF3fjU2G189QBpcUqmBLrnSs4504s8GjLxrwm5qYrg3dKFf6x6VbwQ3yOS/wz8+bS0ruwfELaBY2nyoNkn4gvW65GKRn4WForwP+dONHDaOHeZAAAAAElFTkSuQmCC) no-repeat center;background-size:contain}.preview_appmsg .rich_media_title{margin-top:2.3em}@media screen and (min-width:1024px){.rich_media_global_msg{position:relative;margin-bottom:32px}.preview_appmsg .rich_media_title.rich_media_title{margin-top:0}}.preview_appmsg .share_global_info{padding-top:3em}@media screen and (min-width:1024px){body{background-color:#fff}.page_pages{width:740px;margin-left:auto;margin-right:auto}.preview_appmsg .share_global_info{padding-top:20px}.preview_appmsg .rich_media_global_msg{margin-bottom:10px}}.rich_media_inner{word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto}.rich_media_area_primary{padding:20px 16px 12px;background-color:#fafafa}.rich_media_area_primary.voice{padding-top:66px}.rich_media_area_primary .weui-loadmore_line .weui-loadmore__tips{color:rgba(0,0,0,0.3);background-color:#fafafa}.rich_media_area_extra{padding:0 16px 24px}.rich_media_extra{padding-top:30px}.mpda_bottom_container .rich_media_extra{padding-top:24px}.icon_appmsg_tag{display:inline-block;vertical-align:middle;padding:0 .5em;font-size:12px;line-height:1.5;background-color:#c3c3c3;color:#fff;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;width:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;max-width:70%}.icon_appmsg_tag.primary{color:#3bb638;padding:4px .78em;background-color:rgba(9,187,7,0.08);font-size:12px;border-top-left-radius:.95em 50%;-moz-border-radius-topleft:.95em 50%;-webkit-border-top-left-radius:.95em 50%;border-top-right-radius:.95em 50%;-moz-border-radius-topright:.95em 50%;-webkit-border-top-right-radius:.95em 50%;border-bottom-left-radius:.95em 50%;-moz-border-radius-bottomleft:.95em 50%;-webkit-border-bottom-left-radius:.95em 50%;border-bottom-right-radius:.95em 50%;-moz-border-radius-bottomright:.95em 50%;-webkit-border-bottom-right-radius:.95em 50%}.icon_appmsg_tag.default{border:1px solid rgba(0,0,0,0.1);color:rgba(0,0,0,0.3);background-color:transparent;padding:0 .54em;font-size:15px;line-height:1.3;border-top-left-radius:.67em 50%;-moz-border-radius-topleft:.67em 50%;-webkit-border-top-left-radius:.67em 50%;border-top-right-radius:.67em 50%;-moz-border-radius-topright:.67em 50%;-webkit-border-top-right-radius:.67em 50%;border-bottom-left-radius:.67em 50%;-moz-border-radius-bottomleft:.67em 50%;-webkit-border-bottom-left-radius:.67em 50%;border-bottom-right-radius:.67em 50%;-moz-border-radius-bottomright:.67em 50%;-webkit-border-bottom-right-radius:.67em 50%}.rich_media_meta_list .icon_appmsg_tag.default{margin-top:-1px}.icon_appmsg_tag.title_tag{background-color:#d04b4e}.icon_global_tag_wrp{text-align:right;padding-bottom:12px}.icon_global_tag{background-color:rgba(118,118,118,0.16);color:rgba(0,0,0,0.41);line-height:2.2;border-top-left-radius:1em 50%;-moz-border-radius-topleft:1em 50%;-webkit-border-top-left-radius:1em 50%;border-bottom-left-radius:1em 50%;-moz-border-radius-bottomleft:1em 50%;-webkit-border-bottom-left-radius:1em 50%;padding:0 1.8em 0 1.34em;font-size:12px;margin-right:-24px;display:inline-block;vertical-align:top}.appmsg_style_default .share_mod_context{padding-left:15px;padding-right:15px}.appmsg_style_default.page_share_img .share_media{margin:0 -15px}.appmsg_skin_default .share_mod_context,.appmsg_skin_default.page_share_audio .share_audio_context,.appmsg_skin_default .share_audio_context:active{background-color:#fff}a{color:#576b95;text-decoration:none}body{background-color:#f2f2f2}.share_mod_context{background-color:#fafafa;padding:1px 24px;margin:15px 0}.share_mod_context:first-child{margin-top:0}.share_mod_context .share_mod_hd{position:relative;color:#b2b2b2;line-height:2.8;font-size:15px}.share_mod_context .share_mod_hd:before{content:" ";position:absolute;left:0;bottom:0;right:0;height:1px;border-bottom:1px solid #e5e5e5;-webkit-transform-origin:0 100%;transform-origin:0 100%;-webkit-transform:scaleY(0.5);transform:scaleY(0.5)}.share_mod_context .account_info{padding:20px 0 20px}.share_mod_context .account_info .flex_bd{padding-left:.85em}.share_mod_context .account_avatar{width:40px;height:40px;padding:0}.share_mod_context .account_nickname{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-height:1.2;color:#576b95;font-size:14px}.share_mod_context .account_nickname_inner{font-weight:400;vertical-align:top}.share_mod_context .account_desc{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;color:rgba(0,0,0,0.3);font-size:14px;line-height:1.2;padding-top:.4em}.share_mod_context .account_desc_inner{display:inline;vertical-align:top}.share_mod_context .share_notice{font-size:16px;margin-bottom:18px;word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto}.share_mod_context .share_media{padding-bottom:17px}.share_mod_context .more_media_title{font-weight:400}.share_mod_context .more_media_mask{position:absolute;bottom:0;left:0;right:0;top:0;background-image:-moz-linear-gradient(top,rgba(255,255,255,0) 0,rgba(255,255,255,0) 30%,rgba(0,0,0,0.5) 100%);background-image:-o-linear-gradient(top,rgba(255,255,255,0) 0,rgba(255,255,255,0) 30%,rgba(0,0,0,0.5) 100%);background-color:rgba(46,46,46,0.3);background-image:-webkit-gradient(linear,0 0,0 100%,from(rgba(255,255,255,0)),color-stop(30%,rgba(255,255,255,0)),to(rgba(0,0,0,0.5)));background-image:-webkit-linear-gradient(top,rgba(255,255,255,0) 0,rgba(255,255,255,0) 30%,rgba(0,0,0,0.5) 100%);background-image:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 30%,rgba(0,0,0,0.5) 100%);background-color:transparent}.share_global_info{padding-bottom:26px;margin-bottom:0}@media screen and (min-width:1024px){body,.share_mod_context{background-color:#fff}.rich_media_extra .weui-loadmore__tips.weui-loadmore__tips{background-color:#fff}}.page_share_img .share_media{margin:0 -24px;overflow:hidden}.page_share_img .share_media img{width:100%;display:block;margin:10px 0}.page_share_img .share_media img:last-child{margin-bottom:0}.page_share_img .more_media_list{overflow:hidden;padding:15px 0}.page_share_img .more_media{width:49%;padding-bottom:35.231%;background-color:#fafafa}.page_share_img .more_media:nth-of-type(odd){float:left}.page_share_img .more_media:nth-of-type(even){float:right}</style>
+<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/widget/wx_profile_dialog_primary3de35e.css" />
+<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/pages/video3de35e.css" />
+<link rel="stylesheet" type="text/css" href="//res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/share/common_combo3f3f5c.css" />
+
+    </head>
+    <body id="" class="zh_CN page_share_img  appmsg_skin_default appmsg_style_default">
+        
+
+<script nonce="278851173" type="text/javascript">
+window.page_begintime = (+new Date());
+</script>
+
+
+        <link rel="dns-prefetch" href="//res.wx.qq.com">
+<link rel="dns-prefetch" href="//mmbiz.qpic.cn">
+<link rel="shortcut icon" type="image/x-icon" href="//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/favicon22c41b.ico">
+<script nonce="278851173" type="text/javascript">
+    String.prototype.html = function(encode) {
+        var replace =["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&amp;", "&", "&yen;", "¥"];
+        if (encode) {
+            replace.reverse();
+        }
+        for (var i=0,str=this;i< replace.length;i+= 2) {
+             str=str.replace(new RegExp(replace[i],'g'),replace[i+1]);
+        }
+        return str;
+    };
+
+    window.isInWeixinApp = function() {
+        return /MicroMessenger/.test(navigator.userAgent);
+    };
+
+    window.getQueryFromURL = function(url) {
+        url = url || 'http://qq.com/s?a=b#rd'; 
+        var tmp = url.split('?'),
+            query = (tmp[1] || "").split('#')[0].split('&'),
+            params = {};
+        for (var i=0; i<query.length; i++) {
+            var arg = query[i].split('=');
+            params[arg[0]] = arg[1];
+        }
+        if (params['pass_ticket']) {
+        	params['pass_ticket'] = encodeURIComponent(params['pass_ticket'].html(false).html(false).replace(/\s/g,"+"));
+        }
+        return params;
+    };
+
+    (function() {
+	    var params = getQueryFromURL(location.href);
+        window.uin = params['uin'] || "" || '';
+        window.key = params['key'] || "" || '';
+        window.wxtoken = params['wxtoken'] || '';
+        window.pass_ticket = params['pass_ticket'] || '';
+        window.appmsg_token = "";
+    })();
+
+    function wx_loaderror() {
+        if (location.pathname === '/bizmall/reward') {
+            new Image().src = '/mp/jsreport?key=96&content=reward_res_load_err&r=' + Math.random();
+        }
+    }
+
+</script>
+
+<script nonce="278851173" type="text/javascript">
+        window.__moon_report_uin = "0";
+            window.no_moon_ls = 0;
+    </script>
+        
+
+<script nonce="278851173" type="text/javascript">
+window.write_sceen_time = (+new Date());
+</script>
+
+<div id="js_article" class="page_pages ">
+        <div class="share_mod_context share_global_info">
+        <div class="flex_context account_info">
+            <div class="js_go_profile flex_hd">
+                <span  class="radius_avatar account_avatar">
+                                        <img class="account_avatar" src="http://mmbiz.qpic.cn/mmbiz/ow5rEn8QGlFGU27ocRxDBOn95VBS6SO7dEejrgcynpJWamk6qibLTgymRzLRD2P2omXYoDb0ePwkZffv0EBDYjQ/0?wx_fmt=png" alt="小道消息">
+                                    </span>
+            </div>
+            <div class="flex_bd">
+                <div class="js_go_profile account_nickname"><strong class="account_nickname_inner">小道消息</strong></div>
+                <div class="account_desc">
+                    <div class="account_desc_inner">
+                        <span id="publish_time">2018-08-14</span>
+                                                                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="js_content">
+                        <p class="share_notice" lang="en">
+                <script nonce="278851173">
+                document.write("今天读了一篇谈腾讯战略的文章，基本上不同意该文章的观点。索性我来谈一下好了。这样的话题不太适合公开聊，在知识星球文字直播吧，感兴趣的进来参与即可。".replace(/\r/g,"").replace(/\n/g,"<br>").replace(/\s/g,"&nbsp;"))
+                </script>
+            </p>
+                        <div id="img_list" class="share_media">
+                                <img src="http://mmbiz.qpic.cn/mmbiz_jpg/ow5rEn8QGlH7L4Pc8DPMicp2Ja9me1pOnwV3ibRskh4icKhJXajIAdhSOLY6A5ibqPCibYS7ibhtLS3HJQ1z6MLCcibmw/0?wx_fmt=jpeg" alt="">
+                            </div>
+        </div>        
+        <div id="bot_bar" class="rich_media_tool">
+            <div id="js_read_area3" class="media_tool_meta tips_global_primary meta_primary" style="display:none;">阅读 <span id="readNum3"></span></div>
+            <span style="display:none;" class="media_tool_meta meta_extra meta_praise" id="like3">
+                <i class="icon_praise_gray"></i><span class="praise_num" id="likeNum3"></span>
+            </span>
+            <a id="js_report_article3" style="display:none;" class="media_tool_meta tips_global meta_extra" href="##">投诉</a>
+        </div>
+    </div>
+    
+
+    <div class="rich_media_area_extra">
+      
+      
+      <div class="ct_mpda_wrp" id="js_sponsor_ad_area" style="display:none;"></div>
+      
+            
+      <div class="mpda_bottom_container" id="js_bottom_ad_area"></div>
+            
+      
+
+<div class="rich_media_extra rich_media_extra_discuss" id="js_cmt_container" style="display:none">
+  
+  <div class="discuss_mod" id="js_cmt_title" style="display:none">
+    <div class="discuss_container">
+      <div class="weui-loadmore weui-loadmore_line mod_title_context_primary">
+        <span class="weui-loadmore__tips">留言</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="discuss_mod" id="js_friend_cmt_area" style="display:none">
+  </div>
+  <div id="js_cmt_area" class="discuss_mod" style="display:none;">
+    
+  </div>
+  </div>
+
+    </div>
+</div>
+
+<script nonce="278851173" type="text/javascript">
+window.first_sceen__time = (+new Date());
+</script>
+
+
+        
+        <script nonce="278851173">
+    var __DEBUGINFO = {
+        debug_js : "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/debug/console34c264.js",
+        safe_js : "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/safe/moonsafe34c264.js",
+        res_list: []
+    };
+</script>
+
+<script nonce="278851173" type="text/javascript">
+(function() {
+	var totalCount = 0,
+			finishCount = 0;
+
+	function _loadVConsolePlugin() {
+		window.vConsole = new window.VConsole();
+		while (window.vConsolePlugins.length > 0) {
+			var p = window.vConsolePlugins.shift();
+			window.vConsole.addPlugin(p);
+		}
+	}
+	
+	function _addVConsole(uri, cb) {
+		totalCount++;
+		var url = '//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/' + uri;
+		var node = document.createElement('SCRIPT');
+		node.type = 'text/javascript';
+		node.src = url;
+		node.setAttribute('nonce', '278851173');
+		if (cb) {
+			node.onload = cb;
+		}
+		document.getElementsByTagName('head')[0].appendChild(node);
+	}
+	if (
+		(document.cookie && document.cookie.indexOf('vconsole_open=1') > -1)
+		|| location.href.indexOf('vconsole=1') > -1
+	) {
+		window.vConsolePlugins = [];
+		_addVConsole('3.0.0/vconsole.min.js', function() {
+			
+			_addVConsole('plugin/vconsole-mpopt/1.0.1/vconsole-mpopt.js', _loadVConsolePlugin);
+		});
+	}
+})();
+</script>
+        
+        <script nonce="278851173">window.__moon_host = 'res.wx.qq.com';window.moon_map = {"appmsg/emotion/caret.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/caret278965.js","a/appdialog_confirm.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/appdialog_confirm.html34f0d8.js","new_video/player.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/new_video/player.html3dd294.js","biz_wap/zepto/touch.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/zepto/touch34c264.js","biz_wap/zepto/event.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/zepto/event34c264.js","biz_wap/zepto/zepto.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/zepto/zepto34c264.js","a/tpl/sponsor_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/tpl/sponsor_tpl.html3fe228.js","a/tpl/new_cpc_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/tpl/new_cpc_tpl.html3fe228.js","biz_common/utils/emoji_panel_data.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/emoji_panel_data3518c6.js","biz_common/utils/emoji_data.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/emoji_data3518c6.js","appmsg/emotion/textarea.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/textarea3d171e.js","appmsg/emotion/nav.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/nav278965.js","appmsg/emotion/common.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/common3518c6.js","appmsg/emotion/slide.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/slide2a9cd9.js","a/appdialog_confirm.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/appdialog_confirm34c32a.js","new_video/player.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/new_video/player3ff7ef.js","a/tpl/crt_size_map.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/tpl/crt_size_map3fe228.js","biz_wap/jsapi/cardticket.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/jsapi/cardticket34c264.js","biz_common/jquery.md5.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/jquery.md53518c6.js","appmsg/emotion/dom.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/dom31ff31.js","appmsg/emotion/emotion.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/emotion/emotion3f5bf4.js","appmsg/my_comment_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/my_comment_tpl.html3ff7ef.js","appmsg/friend_comment_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/friend_comment_tpl.html3de35e.js","appmsg/comment_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/comment_tpl.html3de35e.js","biz_wap/utils/fakehash.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/fakehash38c7af.js","appmsg/comment_report.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/comment_report3d5603.js","biz_common/utils/wxgspeedsdk.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/wxgspeedsdk3518c6.js","appmsg/cmt_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/cmt_tpl.html3de35e.js","biz_common/utils/respTypes.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/respTypes3518c6.js","biz_wap/utils/hand_up_state.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/hand_up_state3e72f4.js","biz_common/utils/http.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/http3518c6.js","biz_common/utils/cookie.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/cookie3518c6.js","a/video.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/video3ebd5e.js","a/ios.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/ios3ff7ef.js","a/android.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/android40038e.js","a/profile.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/profile3ff7ef.js","a/app_card.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/app_card40038e.js","a/sponsor.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/sponsor3ff7ef.js","a/tpl/cpc_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/tpl/cpc_tpl.html3fe228.js","a/tpl/crt_tpl_manager.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/tpl/crt_tpl_manager3fe228.js","biz_wap/utils/storage.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/storage34c264.js","biz_common/utils/report.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/report3518c6.js","a/cpc_a_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/cpc_a_tpl.html3e57e7.js","a/sponsor_a_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/sponsor_a_tpl.html3ec2ed.js","a/a_tpl.html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/a_tpl.html3ec2ed.js","a/mpshop.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/mpshop3ff7ef.js","a/wxopen_card.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/wxopen_card3ff7ef.js","a/card.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/card311179.js","biz_wap/utils/position.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/position34c264.js","a/a_report.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/a_report3eeb33.js","biz_wap/utils/openUrl.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/openUrl3ff7ef.js","a/a_sign.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/a_sign3fe228.js","rt/appmsg/getappmsgext.rt.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/rt/appmsg/getappmsgext.rt2c21f6.js","new_video/ctl.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/new_video/ctl3f44c2.js","biz_wap/utils/device.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/device3e2bd7.js","biz_wap/utils/log.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/log34c264.js","appmsg/comment.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/comment3ff7ef.js","appmsg/cdn_img_lib.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/cdn_img_lib3de0e0.js","biz_wap/utils/mmversion.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/mmversion3de208.js","biz_wap/utils/ajax.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/utils/ajax3ff7ef.js","biz_common/utils/url/parse.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/url/parse36ebcf.js","appmsg/like.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/like3d171e.js","appmsg/page_pos.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/page_pos3ff7ef.js","appmsg/appmsg_report.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/appmsg_report3dae33.js","appmsg/articleReport.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/articleReport3de35e.js","biz_common/utils/monitor.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/monitor3518c6.js","a/a.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/a/a40038e.js","appmsg/appmsgext.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/appmsgext3ff7ef.js","pages/version4video.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/pages/version4video3ff7ef.js","biz_common/dom/class.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/dom/class3518c6.js","biz_common/dom/event.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/dom/event3a25e9.js","appmsg/log.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/log300330.js","appmsg/malicious_wording.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/malicious_wording3dd66a.js","appmsg/comment_utils.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/comment_utils3ff7ef.js","pages/report.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/pages/report3d3b85.js","appmsg/review_image.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/appmsg/review_image3ffe0c.js","pages/share.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/pages/share3faa35.js","biz_common/tmpl.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/tmpl3518c6.js","biz_wap/jsapi/core.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/jsapi/core3d3b85.js","biz_common/utils/string/html.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_common/utils/string/html3518c6.js","pages/share/image.js":"//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/pages/share/image3d3efa.js"};</script><script nonce="278851173" type="text/javascript">window.__wxgspeeds={}; window.__wxgspeeds.moonloadtime=+new Date()</script><script nonce="278851173"  type="text/javascript" src="//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/biz_wap/moon3f6b3e.js"></script>
+<script nonce="278851173" type="text/javascript">
+if(!!window.__initCatch){
+    window.__initCatch({
+        idkey : 66881,
+        startKey : 30,
+        limit : 10,
+        reportOpt : {
+            uin : "",
+            biz : "",
+            mid : "",
+            idx : ""                
+        }
+    });
+}
+
+window.__commentReportData = {
+    scene : 3,
+    idkey : 66881,
+    moreList : 31,
+    errList : 32,
+    addCommentErr : 33,
+    
+    errComment : 34
+};
+window.cgiData = {
+};
+
+
+var new_appmsg = 1;
+</script>
+
+<script nonce="278851173" type="text/javascript">
+
+(function(_g){
+  var d = _g.cgiData;
+  d.scene = ""*1||0;
+  d.isDemo = ""*1;
+  d.page_type = "2"*1;
+  d.create_time = "1534259178"*1;
+  d.ct = "1534259178";
+  d.article_link = "";
+  d.article_title = "";
+  d.comment_id = "413842035280314368";
+  d.title = "分享图片";
+  d.nick_name = "小道消息";
+  d.round_head_img = "http://mmbiz.qpic.cn/mmbiz/ow5rEn8QGlFGU27ocRxDBOn95VBS6SO7dEejrgcynpJWamk6qibLTgymRzLRD2P2omXYoDb0ePwkZffv0EBDYjQ/0?wx_fmt=png";
+  d.hd_head_img = "http://wx.qlogo.cn/mmhead/Q3auHgzwzM4EOYw3p9pQDznBzXPxFSx5xwQk6LWKAkbhPhHNQNgsCw/0"||"";
+  
+  d.hd_head_img = "http://wx.qlogo.cn/mmhead/Q3auHgzwzM4EOYw3p9pQDznBzXPxFSx5xwQk6LWKAkbhPhHNQNgsCw/0";
+  d.biz = ""||"MjM5ODIyMTE0MA==";
+  d.sn = "" || ""|| "";
+  d.mid = "" || ""|| "2650971238";
+  d.idx = "" || "" || "1";
+  d.tempkey = "";
+  d.is_temp_url = "" ? 1 : 0;
+  d.read_num = "" * 1;
+  d.like_num = "" * 1;
+  d.liked = "" == 'true' ? true : false;
+  d.msg_link = "";
+  d.req_id = '2722t5opAp4hRu6qwq5h3D5C';
+  d.msg_daily_idx = "1" || "";
+  d.is_only_read = "1" * 1;  
+  d.send_time = "";
+  d.abtest_cookie = "";
+  d.devicetype = "android-25";
+  d.version = "26060135";
+  d.user_name = "gh_70949f33590e";
+  d.user_name_new = "";
+  d.malicious_title_reason_id = "0"; 
+  d.malicious_content_type = "0"; 
+  
+  })(window);
+</script>
+
+
+<script nonce="278851173" type="text/javascript">
+
+(function(_g){
+    var cgiData = _g.cgiData;
+    
+    _g._empty_v = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/pic/pages/voice/empty26f1f1.mp3";
+    
+    _g.comment_edit_icon = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/icon_edit25ded2.png";
+    _g.comment_loading_img = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/icon_loading_white2805ea.gif";
+    _g.comment_id = cgiData.comment_id;
+    _g.appmsgid = cgiData.mid;
+    _g.mid = cgiData.mid;
+    _g.biz = cgiData.biz;
+    _g.idx = cgiData.idx;
+    _g.sn = cgiData.sn;
+    _g.appmsgid = '' || ''|| "2650971238";
+    _g.itemidx = "" || "" || "1";
+    _g.pass_ticket = "";
+    _g.msg_title = cgiData.title;
+    _g.icon_emotion_switch = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/emotion/icon_emotion_switch.2x2f1273.png";
+    _g.icon_emotion_switch_active = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/emotion/icon_emotion_switch_active.2x2f1273.png";
+    _g.scene = ""*1||0; 
+    _g.is_temp_url = "" ? 1 : 0; 
+    _g.icon_loading_white = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/icon_loading_white2805ea.gif";
+    _g.item_show_type = "8";  
+    _g.source = "";
+    _g.ascene = "";
+    _g.req_id = '2722t5opAp4hRu6qwq5h3D5C';
+    _g.subscene = "";
+    _g.user_uin = "0";
+    _g.friend_read_source = "" || "";
+    _g.friend_read_version = "" || "";
+    _g.friend_read_class_id = "" || "";
+    _g.ct = "1534259178";
+    _g.networkType = ''; 
+    _g.can_see_complaint = '0'; 
+})(window);
+
+
+(function(){
+  var bodyClassName = document.body.className || '';
+  if(bodyClassName.indexOf('rich_media_empty_extra')==-1){
+    bodyClassName += ' rich_media_empty_extra';
+  }
+  document.body.className = bodyClassName;
+})();
+</script>
+
+
+<script nonce="278851173" type="text/javascript">
+  window.real_show_page_time = +new Date();
+  if (!!window.addEventListener){
+    window.addEventListener("load", function(){
+        window.onload_endtime = +new Date();
+    });
+  }
+</script>
+
+<script nonce="278851173" type="text/javascript">
+seajs.use('pages/share/image.js');
+</script>
+
+    </body>
+    <script nonce="278851173" type="text/javascript">document.addEventListener("touchstart", function() {},false);</script>
+</html>
+
