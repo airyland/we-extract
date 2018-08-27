@@ -3,6 +3,7 @@ const request = require('request-promise')
 const cheerio = require('cheerio')
 const parseUrl = require('./parse-wechat-url')
 const errors = require('./errors')
+const extractProfile = require('./extract-profile')
 
 const defaultConfig = {
   shouldReturnRawMeta: false,
@@ -52,6 +53,8 @@ const extract = async function (html, options = {}) {
     } catch (e) {
       return getError(1002)
     }
+  } else {
+    html = html.replace(/\\n/g, '')
   }
 
   if (!html) {
@@ -452,5 +455,6 @@ const extract = async function (html, options = {}) {
 }
 
 module.exports = {
-  extract
+  extract,
+  extractProfile
 }

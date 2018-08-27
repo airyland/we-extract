@@ -38,6 +38,24 @@ const rs = await extract('微信文章 url 或者 文章内容', {
   shouldReturnRawMeta: false, // 是否返回原始的 js 解析结果，一般只用于调试，默认不返回
   shouldReturnContent: true // 是否返回内容，默认返回
 })
+
+// v1.1.0 支持解析 profile 页面
+const extractProfile = require('we-extract').extractProfile
+
+// 返回结果
+{
+  done: true,
+  data: {
+    last_posted_at: 1535119147, // 最新一条群发的时间
+    list: [{
+      "datetime": 1534169700,
+      "content_url": "https://mp.weixin.qq.com/s?timestamp=1535378061&amp;src=3&amp;ver=1&amp;signature=...",
+      "title": "伦敦这座博物馆里，曾经藏着大清战败的秘密｜大象文摘",
+      "digest": "西人所铸，多系实炮；后用轮机，施之钻锉。"
+    }],
+    raw_list: [] // 省略原始列表数据
+  }
+}
 ```
 
 ## 返回结果说明
@@ -123,3 +141,4 @@ module.exports = {
 + 如果在搜狗微信搜不到账号，极有可能是因为公众号改了名字，试试以前的名字应该能搜索到。
 + 微信链接的 search 拼接符可能为 `&amp;` 需要做一个替换处理，否则解析链接参数时会有问题。
 + 一个 ip 获取微信文章内容有限制，需要限制速率或者轮换 ip。
++ 一条临时链接有效期是 6 小时，过期后可以通过微信打开，但是大概 50 天左右也无法在微信打开，会显示系统错误。
