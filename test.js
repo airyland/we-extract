@@ -46,4 +46,9 @@ const fs = require('fs')
 
   console.log(imageRs)
 
+  const videoUrl = fs.readFileSync('./links/video.html', 'utf-8')
+  const videoRs = await extract(videoUrl)
+
+  console.log(videoRs)
+
 })()

@@ -250,6 +250,9 @@ const extract = async function (html, options = {}) {
           if (vid) {
             data.vid = vid
             post.msg_source_url = 'http://v.qq.com/x/page/' + vid + '.html'
+            if (!post.msg_cover) {
+              post.msg_cover = `https://vpic.video.qq.com/60643382/${vid}.png`
+            }
           }
         }
 
@@ -431,12 +434,17 @@ const extract = async function (html, options = {}) {
         .replace('document.write', 'return ') + ')'
 
         const fn = new Function(code)
-        post.msg_content = post.msg_content.replace(reg, fn()).trim().replace(/\n/g,"<br>")
+        post.msg_content = post.msg_content.replace(reg, fn())
       } catch (e) {
         // 此处在 v1.2.0 之后不报错，因为不影响整体流程
         // return getError(1005)
       }
     }
+  }
+
+  // 避免有换行符
+  if (post.msg_content) {
+    post.msg_content = post.msg_content.trim().replace(/\n/g,"<br>")
   }
 
   const data = {
