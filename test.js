@@ -51,4 +51,9 @@ const fs = require('fs')
 
   console.log(videoRs)
 
+  const documentWriteUrl = fs.readFileSync('./links/document.write.html', 'utf-8')
+  const documentWriteRs = await extract(documentWriteUrl)
+
+  console.log(documentWriteRs)
+
 })()
