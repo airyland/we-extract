@@ -422,23 +422,27 @@ const extract = async function (html, options = {}) {
     const reg = /<script[\s\S]*?>([\s\S]*?)<\/script>/
 
     const rs = post.msg_content.match(reg)
-    const script = rs[0]
+    console.log(rs)
 
-    if ((type === 'voice' || type === 'image') && /document\.write/.test(script)) {
-      try {
-        const code = script
-        .split('.replace')[0]
-        .split('\n')
-        .filter(one => !one.includes('<script') && !one.includes('script>'))
-        .join('\n')
-        .replace('document.write', 'return ') + ')'
+    if (rs) { // 有可能只是正文里提到了 document.write
+      const script = rs[0]
 
-        const fn = new Function(code)
-        post.msg_content = post.msg_content.replace(reg, fn())
-      } catch (e) {
-        // 此处在 v1.2.0 之后不报错，因为不影响整体流程
-        // return getError(1005)
-      }
+      if ((type === 'voice' || type === 'image') && /document\.write/.test(script)) {
+        try {
+          const code = script
+          .split('.replace')[0]
+          .split('\n')
+          .filter(one => !one.includes('<script') && !one.includes('script>'))
+          .join('\n')
+          .replace('document.write', 'return ') + ')'
+
+          const fn = new Function(code)
+          post.msg_content = post.msg_content.replace(reg, fn())
+        } catch (e) {
+          // 此处在 v1.2.0 之后不报错，因为不影响整体流程
+          // return getError(1005)
+        }
+      }      
     }
   }
 
