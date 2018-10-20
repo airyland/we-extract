@@ -56,4 +56,9 @@ const fs = require('fs')
 
   console.log(documentWriteRs)
 
+  const _20181021WriteUrl = fs.readFileSync('./links/20181021.issue.html', 'utf-8')
+  const _20181021WriteRs = await extract(_20181021WriteUrl)
+
+  console.log(_20181021WriteRs)
+
 })()

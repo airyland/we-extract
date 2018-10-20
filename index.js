@@ -81,7 +81,8 @@ const extract = async function (html, options = {}) {
     return getError(2006)
   } else if (html.includes('此内容发送失败无法查看')) {
     return getError(2007)
-  } else if (!html.includes('id="js_content"')) {
+  } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
+    console.log('fuck')
     return getError(1000)
   }
 
@@ -283,7 +284,11 @@ const extract = async function (html, options = {}) {
         }
         return line
       }).join('\n')
-      code = 'var window = {};\n' + code
+      code = `var window = {
+        location: {
+          protocol: 'https'
+        }
+      };\nvar document={};\nvar location={protocol: "https"};\n` + code
 
       let rs = 'var rs = {'
       code.match(/var\s(.*?)\s=/g).map(key => key.split(' ')[1]).forEach(key => {
@@ -297,9 +302,11 @@ const extract = async function (html, options = {}) {
       code += rs
       let data = {}
       try {
+        console.log(code)
         const fn = new Function(code)
         data = fn()
       } catch (e) {
+        console.log(e)
         return getError(1005)
       }
 
