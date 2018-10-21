@@ -302,7 +302,6 @@ const extract = async function (html, options = {}) {
       code += rs
       let data = {}
       try {
-        console.log(code)
         const fn = new Function(code)
         data = fn()
       } catch (e) {
