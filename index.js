@@ -4,6 +4,7 @@ const cheerio = require('cheerio')
 const parseUrl = require('./parse-wechat-url')
 const errors = require('./errors')
 const extractProfile = require('./extract-profile')
+const unescape = require('lodash.unescape')
 
 const defaultConfig = {
   shouldReturnRawMeta: false,
@@ -479,6 +480,9 @@ const extract = async function (html, options = {}) {
   if (!data.msg_title || !data.msg_publish_time) {
     return getError(1001)
   }
+
+  // 标题 entities 处理
+  data.msg_title = unescape(data.msg_title)
 
   return {
     code: 0,
