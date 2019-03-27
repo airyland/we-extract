@@ -34,10 +34,14 @@ const extract = async function (html, options = {}) {
 
   // 支持地址
   if (/^http/.test(html)) {
-    if (!/http(s?):\/\/mp.weixin.qq.com/.test(html)) {
+    if (!/http(s?):\/\/mp.weixin.qq.com/.test(html) && !/http(s?):\/\/weixin.sogou.com/.test(html)) {
       return getError(2009)
     }
     paramType = 'URL'
+    let host = 'mp.weixin.qq.com'
+    if (/http(s?):\/\/weixin.sogou.com/.test(html)) {
+      host = 'weixin.sogou.com'
+    }
     try {
       html = await request({
         uri: html,
@@ -48,9 +52,25 @@ const extract = async function (html, options = {}) {
           'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
           'Cache-Control': 'max-age=0',
           'Connection': 'keep-alive',
-          'Host': 'mp.weixin.qq.com'
+          'Host': host
         }
       })
+
+      if (html.includes('location.replace')) {
+        const rs = html.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi)
+        if (rs && rs[0]) {
+          const code = rs[0].split('\n').filter(one => {
+            return !one.includes('location.replace') && !one.includes('script>')
+          }).join('\n') + '\n return url;'
+
+          try {
+            const fn = new Function(code)
+            return await extract(fn(), options)
+          } catch (e) {
+            return getError(1005)
+          }
+        }
+      }
     } catch (e) {
       return getError(1002)
     }
@@ -449,7 +469,7 @@ const extract = async function (html, options = {}) {
           // 此处在 v1.2.0 之后不报错，因为不影响整体流程
           // return getError(1005)
         }
-      }      
+      }
     }
   }
 
