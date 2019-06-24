@@ -241,6 +241,7 @@ const extract = async function (html, options = {}) {
       code = code.slice(2, code.length - 2).join('\n').replace('var d = _g.cgiData;', 'var d = {}') + '\n  return d;'
       let data = {}
       try {
+        code = `var _g = {};` + code
         const fn = new Function(code)
         data = fn()
         accountName = data.nick_name
@@ -287,6 +288,7 @@ const extract = async function (html, options = {}) {
           post.raw_data = data
         }
       } catch (e) {
+        console.log('error', e)
         return getError(1005)
       }
     }
