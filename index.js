@@ -103,7 +103,6 @@ const extract = async function (html, options = {}) {
   } else if (html.includes('此内容发送失败无法查看')) {
     return getError(2007)
   } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
-    console.log('fuck')
     return getError(1000)
   }
 
@@ -323,10 +322,24 @@ const extract = async function (html, options = {}) {
       code += rs
       let data = {}
       try {
+      	code = ` String.prototype.html = function(encode) {
+        var replace =["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&yen;", "¥", "&amp;", "&"];
+        var replaceReverse = ["&", "&amp;", "¥", "&yen;", "<", "&lt;", ">", "&gt;", " ", "&nbsp;", '"', "&quot;", "'", "&#39;"];
+	    var target;
+	    if (encode) {
+	    	target = replaceReverse;
+	    } else {
+	    	target = replace;
+	    }
+        for (var i=0,str=this;i< target.length;i+= 2) {
+             str=str.replace(new RegExp(target[i],'g'),target[i+1]);
+        }
+        return str;
+    };
+	` + code
         const fn = new Function(code)
         data = fn()
       } catch (e) {
-        console.log(e)
         return getError(1005)
       }
 
@@ -449,7 +462,6 @@ const extract = async function (html, options = {}) {
     const reg = /<script[\s\S]*?>([\s\S]*?)<\/script>/
 
     const rs = post.msg_content.match(reg)
-    console.log(rs)
 
     if (rs) { // 有可能只是正文里提到了 document.write
       const script = rs[0]
