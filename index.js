@@ -288,7 +288,6 @@ const extract = async function (html, options = {}) {
           post.raw_data = data
         }
       } catch (e) {
-        console.log('error', e)
         return getError(1005)
       }
     }
@@ -296,7 +295,7 @@ const extract = async function (html, options = {}) {
     // 图文
     if ((type === 'post' || type === 'repost') && script.includes('var msg_link = ')) {
       const lines = script.split('\n')
-      let code = lines.slice(1, lines.length - 2).filter(line => {
+      let code = lines.slice(1, lines.length - 1).filter(line => {
         return !line.includes('var title')
       }).map(line => {
         // 特殊符号可能会导致解析出 bug
@@ -306,11 +305,14 @@ const extract = async function (html, options = {}) {
         }
         return line
       }).join('\n')
+
       code = `var window = {
         location: {
           protocol: 'https'
         }
-      };\nvar document={};\nvar location={protocol: "https"};\n` + code
+      };\nvar document={
+        addEventListener: function () {}
+      };\nvar location={protocol: "https"};\n` + code
 
       let rs = 'var rs = {'
       code.match(/var\s(.*?)\s=/g).map(key => key.split(' ')[1]).forEach(key => {
@@ -340,6 +342,7 @@ const extract = async function (html, options = {}) {
     };
 	` + code
         const fn = new Function(code)
+
         data = fn()
       } catch (e) {
         return getError(1005)
