@@ -119,7 +119,7 @@ const extract = async function (html, options = {}) {
 
   // 检查是否为视频类型
   const hasVideo = $('#js_content .video_card_context')
-  if (hasVideo.length) {
+  if (hasVideo.length || $('#video_title').length) {
     type = 'video'
   }
 
