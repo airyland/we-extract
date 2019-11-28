@@ -114,7 +114,9 @@ const extract = async function (html, options = {}) {
   .replace('>功能介绍', ' id="append-account-desc">功能介绍')
   .replace(/\n\s+<script/g, '\n\n<script')
 
-  const $ = cheerio.load(html)
+  const $ = cheerio.load(html, {
+    decodeEntities: false
+  })
 
   // 原创
   if ($('#copyright_logo') && $('#copyright_logo').text().includes('原创')) {
@@ -169,7 +171,6 @@ const extract = async function (html, options = {}) {
   const post = {
     msg_has_copyright: hasCopyright
   }
-
   post.msg_content = null
   if (shouldReturnContent) {
     post.msg_content = $('#js_content').html()
@@ -436,7 +437,9 @@ const extract = async function (html, options = {}) {
      html = html.replace(/<mp-miniprogram([^>]*?)><\/mp-miniprogram>/g, '<p>[小程序]</p>');
      html = html.replace(/<br\s*\/>/g, 'WEEXTRACT')
 
-     const $$ = cheerio.load(html)
+     const $$ = cheerio.load(html, {
+       decodeEntities: false
+     })
      let processedContent = $$.text()
      .replace(/</g, '&lt;')
      .replace(/>/g, '&gt;')
