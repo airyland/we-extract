@@ -104,6 +104,8 @@ const extract = async function (html, options = {}) {
     return getError(2007)
   } else if (html.includes('由用户投诉并经平台审核，涉嫌过度营销、骚扰用户')) {
     return getError(2011)
+  } else if (html.includes('page_msg') && html.includes('此帐号已被屏蔽')) {
+    return getError(2012)
   } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
     return getError(1000)
   }
