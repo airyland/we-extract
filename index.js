@@ -124,7 +124,7 @@ const extract = async function (html, options = {}) {
   }
 
   // 检查是否为视频类型
-  const hasVideo = $('#js_content .video_card_context')
+  const hasVideo = $('body.video')
   if (hasVideo.length || $('#video_title').length) {
     type = 'video'
   }
@@ -281,6 +281,12 @@ const extract = async function (html, options = {}) {
               post.msg_cover = `https://vpic.video.qq.com/60643382/${vid}.png`
             }
           }
+        }
+
+        // 视频只有标题 + 内容，内容直接从 meta 里取
+        if (type === 'video') {
+          const description = $("meta[name='description']").attr("content")
+          post.msg_content = description
         }
 
         // 发布时间
