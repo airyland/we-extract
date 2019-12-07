@@ -273,13 +273,17 @@ const extract = async function (html, options = {}) {
 
         // 视频链接赋值于 source_url
         if (type === 'video') {
-          const vid = html.match(/vid\s*:\s*"(.*?)"/)[1]
+          const vid = html.match(/vid\s*:\s*'(.*?)'/)[1]
           if (vid) {
             data.vid = vid
-            post.msg_source_url = 'http://v.qq.com/x/page/' + vid + '.html'
-            if (!post.msg_cover) {
-              post.msg_cover = `https://vpic.video.qq.com/60643382/${vid}.png`
-            }
+            // 旧版 vid 已经不适用
+            // post.msg_source_url = 'http://v.qq.com/x/page/' + vid + '.html'
+          }
+          if (!post.msg_cover) {
+            console.log('image', $("meta[property='og:image']"))
+            // 旧版废弃
+            // post.msg_cover = `https://vpic.video.qq.com/60643382/${vid}.png`
+            post.msg_cover = $("meta[property='og:image']").attr("content")
           }
         }
 
