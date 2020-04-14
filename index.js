@@ -538,11 +538,26 @@ const extract = async function (html, options = {}) {
   // 标题 entities 处理
   data.msg_title = unescape(data.msg_title)
 
+  // 视频
+  if (data.msg_type === 'video') {
+    data.msg_content = data.msg_content.replace(/\\x26/g, '&')
+    data.msg_content = data.msg_content.replace(/\\x0a/g, '<br/>')
+    data.msg_content = convertHtml(data.msg_content)
+  }
+
   return {
     code: 0,
     done: true,
     data: data
   }
+}
+
+function convertHtml (text) {
+  const target =["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&yen;", "¥", "&amp;", "&"]
+  for (var i=0,str=text;i< target.length;i+= 2) {
+    str = str.replace(new RegExp(target[i],'g'),target[i+1])
+  }
+  return str
 }
 
 module.exports = {
