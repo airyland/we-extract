@@ -280,7 +280,6 @@ const extract = async function (html, options = {}) {
             // post.msg_source_url = 'http://v.qq.com/x/page/' + vid + '.html'
           }
           if (!post.msg_cover) {
-            console.log('image', $("meta[property='og:image']"))
             // 旧版废弃
             // post.msg_cover = `https://vpic.video.qq.com/60643382/${vid}.png`
             post.msg_cover = $("meta[property='og:image']").attr("content")
@@ -540,9 +539,14 @@ const extract = async function (html, options = {}) {
 
   // 视频
   if (data.msg_type === 'video') {
-    data.msg_content = data.msg_content.replace(/\\x26/g, '&')
-    data.msg_content = data.msg_content.replace(/\\x0a/g, '<br/>')
-    data.msg_content = convertHtml(data.msg_content)
+    console.log(data)
+    if (!data.msg_content) {
+      data.msg_content = data.msg_title
+    } else {
+      data.msg_content = data.msg_content.replace(/\\x26/g, '&')
+      data.msg_content = data.msg_content.replace(/\\x0a/g, '<br/>')
+      data.msg_content = convertHtml(data.msg_content)
+    }
   }
 
   return {
