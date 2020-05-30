@@ -106,6 +106,10 @@ const extract = async function (html, options = {}) {
     return getError(2011)
   } else if (html.includes('此帐号已被屏蔽') && !html.includes('id="js_content"')) {
     return getError(2012)
+  } else if (html.includes('此帐号已自主注销') && !html.includes('id="js_content"')) {
+    return getError(2013)
+  } else if (html.includes('page_rumor') && !html.includes('id="js_content"')) {
+    return getError(2014)
   } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
     return getError(1000)
   }
@@ -539,7 +543,6 @@ const extract = async function (html, options = {}) {
 
   // 视频
   if (data.msg_type === 'video') {
-    console.log(data)
     if (!data.msg_content) {
       data.msg_content = data.msg_title
     } else {
