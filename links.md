@@ -1,3 +1,7 @@
+## 文字
+
+https://mp.weixin.qq.com/s?__biz=MzIzMTYzNjQxNg==&mid=2247484096&idx=1&sn=e5bfe59836cc0c20dd22ce4fdfb80d6d&chksm=e8a06e6fdfd7e7793117cc8a51838d28ba8cf585ccde7ad143ce885d2a0c73a2b7dc50e13f17#rd
+
 ## 屏蔽
 
 https://mp.weixin.qq.com/s?__biz=Mzg5MjA4MDkxMw==&amp;mid=2247486980&amp;idx=1&amp;sn=3e12e7728b6e3fca02ad9248384ab8f9#rd

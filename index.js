@@ -202,19 +202,23 @@ const extract = async function (html, options = {}) {
   }
 
   let extractExtra = false
+  const extra = {
+    biz: null,
+    sn: null,
+    mid: null,
+    idx: null,
+    msg_title: null,
+    user_name: null,
+    nick_name: null,
+    hd_head_img: null
+  }
+  const extraFields = Object.keys(extra)
+
   for (let i = 0; i < rs.length; i++) {
     const script = rs[i]
 
     if (!extractExtra) {
       // biz
-      const extra = {
-        biz: null,
-        sn: null,
-        mid: null,
-        idx: null
-      }
-      const extraFields = Object.keys(extra)
-
       extraFields.forEach(field => {
         const reg = new RegExp(`var\\s+${field}\\s*=`)
         if (reg.test(script)) {
@@ -227,6 +231,23 @@ const extract = async function (html, options = {}) {
           }
           if (!extractExtra) {
             extractExtra = true
+          }
+        }
+
+        if (!extra[field]) {
+          const reg2 = new RegExp(`window\.${field}\\s*=`)
+          if (reg2.test(script)) {
+            try {
+              const line = script.split('\n').filter(one => reg2.test(one))
+              const code = `window = {}; ${line} \n return window.${field}`
+              const fn = new Function(code)
+              extra[field] = fn()
+            } catch (e) {
+              console.log(e)
+            }
+            if (!extractExtra) {
+              extractExtra = true
+            }
           }
         }
       })
@@ -242,6 +263,26 @@ const extract = async function (html, options = {}) {
         post.msg_mid = extra.mid ? extra.mid * 1 : null
       }
     }
+
+
+    extraFields.forEach(field => {
+      if (!extra[field]) {
+        const reg3 = new RegExp(`d\.${field}\\s*=`)        
+        if (reg3.test(script)) {
+          try {
+            const line = script.split('\n').filter(one => reg3.test(one))
+            const code = `d = {}; ${line} \n return d.${field}`
+            const fn = new Function(code.replace(/;,/g, ';'))
+            extra[field] = fn()
+          } catch (e) {
+            console.log(e)
+          }
+          if (!extractExtra) {
+            extractExtra = true
+          }
+        }
+      }
+    })
 
     // 视频
     if ((type === 'video' || type === 'image' || type === 'voice') && script.includes('d.title =')) {
@@ -515,6 +556,18 @@ const extract = async function (html, options = {}) {
     post.msg_content = post.msg_content.trim().replace(/\n/g,"<br>")
   }
 
+  if (!accountId && extra.user_name) {
+    accountId = extra.user_name
+  }
+
+  if (!accountName && extra.nick_name) {
+    accountName = extra.nick_name
+  }
+
+  if (!accountAvatar && extra.hd_head_img) {
+    accountAvatar = extra.hd_head_img
+  }
+
   const data = {
     account_name: accountName,
     account_alias: accountAlias,
@@ -531,6 +584,22 @@ const extract = async function (html, options = {}) {
   for (let i in data) {
     if (data[i] === '') {
       data[i] = null
+    }
+  }
+
+  // 文字类型
+  if (!data.msg_title && data.msg_type === 'post') {
+    data.msg_type = 'text'
+    const title = $("meta[property='og:title']").attr("content")
+    if (title) {
+      data.msg_title = title
+      const rawContent = $('#js_panel_like_title').html()
+      // 使用有换行格式
+      if (rawContent) {
+        data.msg_content = rawContent.trim().replace(/\n/g, '<br/>')
+      } else {
+        data.msg_content = title
+      }
     }
   }
 
