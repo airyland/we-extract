@@ -132,8 +132,8 @@ const extract = async function (html, options = {}) {
   }
 
   // 检查是否为视频类型
-  const hasVideo = $('body.video')
-  if (hasVideo.length || $('#video_title').length) {
+  const hasVideo = /video/.test($('body').attr('class'))
+  if (hasVideo) {
     type = 'video'
   }
 
@@ -231,7 +231,7 @@ const extract = async function (html, options = {}) {
             const fn = new Function(`${line} \n return ${field}`)
             extra[field] = fn()
           } catch (e) {
-            console.log(e)
+            console.log('error', e)
           }
           if (!extractExtra) {
             extractExtra = true
