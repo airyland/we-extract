@@ -607,6 +607,15 @@ const extract = async function (html, options = {}) {
     }
   }
 
+  // 时间参数兜底
+  if (!data.msg_publish_time) {
+    const matched = html.match(/d.ct.=."(\d+)"/)
+    if (matched && matched[1]) {
+      data.msg_publish_time = new Date(matched[1] * 1000)
+      data.msg_publish_time_str = dayjs(data.msg_publish_time).format('YYYY/MM/DD HH:mm:ss')
+    }
+  }
+
   if (!data.msg_title || !data.msg_publish_time) {
     return getError(1001)
   }
