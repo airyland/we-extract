@@ -595,6 +595,7 @@ const extract = async function (html, options = {}) {
   if (!data.msg_title && data.msg_type === 'post') {
     data.msg_type = 'text'
     const title = $("meta[property='og:title']").attr("content")
+    const desc = $("meta[property='og:description']").attr("content")
     if (title) {
       data.msg_title = title
       const rawContent = $('#js_panel_like_title').html()
@@ -604,6 +605,10 @@ const extract = async function (html, options = {}) {
       } else {
         data.msg_content = title
       }
+    }
+    // 可以没有标题，https://mp.weixin.qq.com/s?__biz=MjM5NDcwOTk3NQ==&mid=2651469811&idx=1&sn=21843009d7489a71597476b3fa59e6ca&chksm=bd7d3f4b8a0ab65d53371e763c1cd528df420aac9f3cbed2043d860b4bc7244207076a25a9b5#rd
+    if (!title && desc) {
+      data.msg_title = desc
     }
   }
 
