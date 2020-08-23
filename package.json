@@ -1,6 +1,6 @@
 {
   "name": "we-extract",
-  "version": "1.2.24",
+  "version": "1.2.25",
   "main": "index.js",
   "description": "微信公众号文章元信息解析",
   "keywords": [
