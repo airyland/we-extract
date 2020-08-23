@@ -110,6 +110,8 @@ const extract = async function (html, options = {}) {
     return getError(2012)
   } else if (html.includes('此帐号已自主注销') && !html.includes('id="js_content"')) {
     return getError(2013)
+  } else if (!html.includes('id="js_content"') && html.includes('此帐号处于帐号迁移流程中')) {
+    return getError(2015)
   } else if (html.includes('page_rumor') && !html.includes('id="js_content"')) {
     return getError(2014)
   } else if (!html.includes('id="js_content"') && html.includes('参数错误') && html.includes('appmsg/error.html')) {
