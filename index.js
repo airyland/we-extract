@@ -8,7 +8,8 @@ const unescape = require('lodash.unescape')
 
 const defaultConfig = {
   shouldReturnRawMeta: false,
-  shouldReturnContent: true
+  shouldReturnContent: true,
+  shouldFollowTransferLink: true
 }
 
 const getError = function (code) {
@@ -20,7 +21,7 @@ const getError = function (code) {
 }
 
 const extract = async function (html, options = {}) {
-  const { shouldReturnRawMeta, shouldReturnContent } = Object.assign({}, defaultConfig, options)
+  const { shouldReturnRawMeta, shouldReturnContent, shouldFollowTransferLink } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
 
@@ -93,7 +94,14 @@ const extract = async function (html, options = {}) {
   } else if (html.includes('该公众号已迁移')) {
     const match = html.match(/var\stransferTargetLink\s=\s'(.*?)';/)
     if (match && match[1]) {
-      return await extract(match[1])
+      if (shouldFollowTransferLink) {
+        return await extract(match[1])
+      } else {
+        return {
+          ...getError(1006),
+          url: match[1]
+        }
+      }
     } else {
       return getError(2004)
     }
@@ -323,9 +331,9 @@ const extract = async function (html, options = {}) {
 
         // 视频链接赋值于 source_url
         if (type === 'video') {
-          const vid = html.match(/vid\s*:\s*'(.*?)'/)[1]
-          if (vid) {
-            data.vid = vid
+          const vidMatch = html.match(/vid\s*:\s*'(.*?)'/)
+          if (vidMatch && vidMatch[1]) {
+            data.vid = vidMatch[1]
             // 旧版 vid 已经不适用
             // post.msg_source_url = 'http://v.qq.com/x/page/' + vid + '.html'
           }
