@@ -91,12 +91,11 @@ const extract = async function (html, options = {}) {
   } else if (html.includes('被投诉且经审核涉嫌侵权，无法查看')) {
     return getError(2003)
   } else if (html.includes('该公众号已迁移')) {
-    const match = html.match(/var\stransfer_target_link\s=\s'(.*?)';/)
-    const link = match[1]
-    if (link) {
-      return await extract(link)
+    const match = html.match(/var\stransferTargetLink\s=\s'(.*?)';/)
+    if (match && match[1]) {
+      return await extract(match[1])
     } else {
-      return getError(2005)
+      return getError(2004)
     }
   } else if (html.includes('该内容已被发布者删除')) {
     return getError(2005)
