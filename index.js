@@ -24,6 +24,11 @@ const extract = async function (html, options = {}) {
   const { shouldReturnRawMeta, shouldReturnContent, shouldFollowTransferLink } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
+  let url = null
+
+  if (options.url) {
+    url = options.url
+  }
 
   let type = 'post'
   let hasCopyright = false
@@ -41,6 +46,9 @@ const extract = async function (html, options = {}) {
       return getError(2009)
     }
     paramType = 'URL'
+    if (!url) {
+      url = html
+    }
     let host = 'mp.weixin.qq.com'
     if (/http(s?):\/\/weixin.sogou.com/.test(html)) {
       host = 'weixin.sogou.com'
@@ -70,6 +78,7 @@ const extract = async function (html, options = {}) {
             const fn = new Function(code)
             return await extract(fn(), options)
           } catch (e) {
+            console.log(e)
             return getError(1005)
           }
         }
@@ -389,7 +398,7 @@ const extract = async function (html, options = {}) {
       let rs = 'var rs = {'
       code.match(/var\s(.*?)\s=/g).map(key => key.split(' ')[1]).forEach(key => {
         if (key !== 'window') {
-          rs += `"${key}": ${key},`
+          rs += `"${key}": typeof ${key} !== 'undefined' ? ${key} : null,`
         }
       })
 
@@ -414,7 +423,6 @@ const extract = async function (html, options = {}) {
     };
 	` + code
         const fn = new Function(code)
-
         data = fn()
       } catch (e) {
         return getError(1005)
@@ -589,7 +597,7 @@ const extract = async function (html, options = {}) {
     account_id: accountId,
     account_biz: accountBiz,
     account_biz_number: accountBizNumber,
-    account_qr_code: `https://open.weixin.qq.com/qr/code?username=${accountId}`,
+    account_qr_code: `https://open.weixin.qq.com/qr/code?username=${accountId || accountAlias}`,
     ...post
   }
 
