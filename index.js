@@ -5,6 +5,11 @@ const parseUrl = require('./parse-wechat-url')
 const errors = require('./errors')
 const extractProfile = require('./extract-profile')
 const unescape = require('lodash.unescape')
+const {
+  getParameterByName
+} = require('./util')
+
+const video = require('./video')
 
 const defaultConfig = {
   shouldReturnRawMeta: false,
@@ -12,7 +17,15 @@ const defaultConfig = {
   shouldFollowTransferLink: true
 }
 
-const getError = function (code) {
+const basic = {}
+basic.accountId = ''
+basic.accountAvatar = ''
+
+basic.accountBiz = null
+basic.accountBizNumber = null
+basic.accountName = null
+
+const getError = function(code) {
   return {
     done: false,
     code: code,
@@ -20,11 +33,16 @@ const getError = function (code) {
   }
 }
 
-const extract = async function (html, options = {}) {
-  const { shouldReturnRawMeta, shouldReturnContent, shouldFollowTransferLink } = Object.assign({}, defaultConfig, options)
+const extract = async function(html, options = {}) {
+  const {
+    shouldReturnRawMeta,
+    shouldReturnContent,
+    shouldFollowTransferLink
+  } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
   let url = null
+  let rawUrl = null
 
   if (options.url) {
     url = options.url
@@ -46,6 +64,7 @@ const extract = async function (html, options = {}) {
       return getError(2009)
     }
     paramType = 'URL'
+    rawUrl = html
     if (!url) {
       url = html
     }
@@ -78,7 +97,6 @@ const extract = async function (html, options = {}) {
             const fn = new Function(code)
             return await extract(fn(), options)
           } catch (e) {
-            console.log(e)
             return getError(1005)
           }
         }
@@ -137,8 +155,8 @@ const extract = async function (html, options = {}) {
   }
 
   html = html.replace('>微信号', ' id="append-account-alias">微信号')
-  .replace('>功能介绍', ' id="append-account-desc">功能介绍')
-  .replace(/\n\s+<script/g, '\n\n<script')
+    .replace('>功能介绍', ' id="append-account-desc">功能介绍')
+    .replace(/\n\s+<script/g, '\n\n<script')
 
   const $ = cheerio.load(html, {
     decodeEntities: false
@@ -170,6 +188,10 @@ const extract = async function (html, options = {}) {
     type = 'voice'
   }
 
+  if (/share_media_text/.test(html)) {
+    type = 'text'
+  }
+
   // @todo 检查是否为图片类型
 
   // @todo 链接已过期
@@ -185,7 +207,7 @@ const extract = async function (html, options = {}) {
     return getError(2008)
   }
 
-  let accountName = $('.profile_nickname').text()
+  basic.accountName = $('.profile_nickname').text()
 
   // alias
   const accountAliasPrev = $('#append-account-alias')
@@ -201,12 +223,6 @@ const extract = async function (html, options = {}) {
   if (shouldReturnContent) {
     post.msg_content = $('#js_content').html()
   }
-
-  let accountId = ''
-  let accountAvatar = ''
-
-  let accountBiz = null
-  let accountBizNumber = null
 
   // 获取 block
   const rs = html.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi)
@@ -275,9 +291,9 @@ const extract = async function (html, options = {}) {
       })
 
       if (extractExtra) {
-        accountBiz = extra.biz
-        if (accountBiz) {
-          accountBizNumber = Buffer.from(accountBiz, 'base64').toString() * 1
+        basic.accountBiz = extra.biz
+        if (basic.accountBiz) {
+          basic.accountBizNumber = Buffer.from(basic.accountBiz, 'base64').toString() * 1
         }
 
         post.msg_sn = extra.sn || null
@@ -289,11 +305,15 @@ const extract = async function (html, options = {}) {
 
     extraFields.forEach(field => {
       if (!extra[field]) {
-        const reg3 = new RegExp(`d\.${field}\\s*=`)        
+        const reg3 = new RegExp(`d\.${field}\\s*=`)
         if (reg3.test(script)) {
           try {
             const line = script.split('\n').filter(one => reg3.test(one))
-            const code = `d = {}; ${line} \n return d.${field}`
+            const code = `d = {};
+            \nfunction getXmlValue (path) {
+              return false
+            }
+            \n${line} \n return d.${field}`
             const fn = new Function(code.replace(/;,/g, ';'))
             extra[field] = fn()
           } catch (e) {
@@ -307,23 +327,44 @@ const extract = async function (html, options = {}) {
     })
 
     // 视频
-    if ((type === 'video' || type === 'image' || type === 'voice') && script.includes('d.title =')) {
+    if (['video', 'text'].includes(type) && script.includes('d.title')) {
+      try {
+        video({
+          post,
+          basic,
+          script,
+          getError,
+          html,
+          $,
+          shouldReturnRawMeta
+        })
+      } catch (e) {
+        return getError(1005)
+      }
+    }
+
+    if ((type === 'image' || type === 'voice') && script.includes('d.title =')) {
       const lines = script.split('\n')
-      let code = lines.filter(line => !!line.trim())
-      code = code.slice(2, code.length - 2).join('\n').replace('var d = _g.cgiData;', 'var d = {}') + '\n  return d;'
+      let code = lines.filter(line => !!line.trim()).filter(line => /d\./.test(line))
+      code = `var d = {};
+            \nfunction getXmlValue (path) {
+              return false
+            }\n` + code.join('\n').replace('var d = _g.cgiData;', 'var d = {}') + '\n  return d;'
       let data = {}
+      code = `var _g = {};` + code
+      console.log('code', code)
       try {
         code = `var _g = {};` + code
         const fn = new Function(code)
         data = fn()
         accountName = data.nick_name
-        accountAvatar = data.hd_head_img
-        accountId = data.user_name
+        basic.accountAvatar = data.hd_head_img
+        basic.accountId = data.user_name
 
         // biz
-        if (!accountBiz && data.biz) {
-          accountBiz = data.biz
-          accountBizNumber = Buffer.from(accountBiz, 'base64').toString() * 1
+        if (!basic.accountBiz && data.biz) {
+          basic.accountBiz = data.biz
+          basic.accountBizNumber = Buffer.from(basic.accountBiz, 'base64').toString() * 1
         }
 
         // 标题
@@ -369,6 +410,7 @@ const extract = async function (html, options = {}) {
           post.raw_data = data
         }
       } catch (e) {
+        console.log(e)
         return getError(1005)
       }
     }
@@ -407,7 +449,7 @@ const extract = async function (html, options = {}) {
       code += rs
       let data = {}
       try {
-      	code = ` String.prototype.html = function(encode) {
+        code = ` String.prototype.html = function(encode) {
         var replace =["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&yen;", "¥", "&amp;", "&"];
         var replaceReverse = ["&", "&amp;", "¥", "&yen;", "<", "&lt;", ">", "&gt;", " ", "&nbsp;", '"', "&quot;", "'", "&#39;"];
 	    var target;
@@ -442,11 +484,11 @@ const extract = async function (html, options = {}) {
       if (shouldReturnRawMeta) {
         post.raw_data = data
       }
-      accountId = data.user_name
-      accountAvatar = data.ori_head_img_url
+      basic.accountId = data.user_name
+      basic.accountAvatar = data.ori_head_img_url
 
-      if (!accountName && data.nickname) {
-        accountName = data.nickname
+      if (!basic.accountName && data.nickname) {
+        basic.accountName = data.nickname
       }
     }
   }
@@ -482,8 +524,8 @@ const extract = async function (html, options = {}) {
   }
 
   // 新注册公众号没有头像，置为 null
-  if (accountAvatar.length < 10) {
-    accountAvatar = null
+  if (basic.accountAvatar.length < 10) {
+    basic.accountAvatar = null
   }
 
   // 有可能缺失 mid idx 等信息，从 url 中进行解析
@@ -500,33 +542,33 @@ const extract = async function (html, options = {}) {
   // 转载类型，内容不在 js_content 里
   if (type === 'repost') {
     let html = $('#content_tpl').html()
-     html = html.replace(/<img[^>]*>/g, '<p>[图片]</p>');
-     html = html.replace(/<iframe [^>]*?class=\"res_iframe card_iframe js_editor_card\"[^>]*?data-cardid=\"\"[^>]*?><\/iframe>/ig, '<p>[卡券]</p>');
-     html = html.replace(/<mpvoice([^>]*?)js_editor_audio([^>]*?)><\/mpvoice>/g, '<p>[语音]</p>');
-     html = html.replace(/<mpgongyi([^>]*?)js_editor_gy([^>]*?)><\/mpgongyi>/g, '<p>[公益]</p>');
-     html = html.replace(/<qqmusic([^>]*?)js_editor_qqmusic([^>]*?)><\/qqmusic>/g, '<p>[音乐]</p>');
-     html = html.replace(/<mpshop([^>]*?)js_editor_shop([^>]*?)><\/mpshop>/g, '<p>[小店]</p>');
-     html = html.replace(/<iframe([^>]*?)class=[\'\"][^\'\"]*video_iframe([^>]*?)><\/iframe>/g, '<p>[视频]</p>');
-     html = html.replace(/(<iframe[^>]*?js_editor_vote_card[^<]*?<\/iframe>)/gi, '<p>[投票]</p>');
-     html = html.replace(/<mp-weapp([^>]*?)weapp_element([^>]*?)><\/mp-weapp>/g, '<p>[小程序]</p>');
-     html = html.replace(/<mp-miniprogram([^>]*?)><\/mp-miniprogram>/g, '<p>[小程序]</p>');
-     html = html.replace(/<br\s*\/>/g, 'WEEXTRACT')
+    html = html.replace(/<img[^>]*>/g, '<p>[图片]</p>');
+    html = html.replace(/<iframe [^>]*?class=\"res_iframe card_iframe js_editor_card\"[^>]*?data-cardid=\"\"[^>]*?><\/iframe>/ig, '<p>[卡券]</p>');
+    html = html.replace(/<mpvoice([^>]*?)js_editor_audio([^>]*?)><\/mpvoice>/g, '<p>[语音]</p>');
+    html = html.replace(/<mpgongyi([^>]*?)js_editor_gy([^>]*?)><\/mpgongyi>/g, '<p>[公益]</p>');
+    html = html.replace(/<qqmusic([^>]*?)js_editor_qqmusic([^>]*?)><\/qqmusic>/g, '<p>[音乐]</p>');
+    html = html.replace(/<mpshop([^>]*?)js_editor_shop([^>]*?)><\/mpshop>/g, '<p>[小店]</p>');
+    html = html.replace(/<iframe([^>]*?)class=[\'\"][^\'\"]*video_iframe([^>]*?)><\/iframe>/g, '<p>[视频]</p>');
+    html = html.replace(/(<iframe[^>]*?js_editor_vote_card[^<]*?<\/iframe>)/gi, '<p>[投票]</p>');
+    html = html.replace(/<mp-weapp([^>]*?)weapp_element([^>]*?)><\/mp-weapp>/g, '<p>[小程序]</p>');
+    html = html.replace(/<mp-miniprogram([^>]*?)><\/mp-miniprogram>/g, '<p>[小程序]</p>');
+    html = html.replace(/<br\s*\/>/g, 'WEEXTRACT')
 
-     const $$ = cheerio.load(html, {
-       decodeEntities: false
-     })
-     let processedContent = $$.text()
-     .replace(/</g, '&lt;')
-     .replace(/>/g, '&gt;')
-     .trim().substr(0, 140)
-     const digest = processedContent.split('WEEXTRACT').map(function(line) {
-         return '<p>' + line + '</p>';
-     }).join('')
+    const $$ = cheerio.load(html, {
+      decodeEntities: false
+    })
+    let processedContent = $$.text()
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .trim().substr(0, 140)
+    const digest = processedContent.split('WEEXTRACT').map(function(line) {
+      return '<p>' + line + '</p>';
+    }).join('')
 
-     $('#js_content').append(digest)
-     const notice = $.html('.share_notice')
-     const content = $.html('#js_share_content')
-     post.msg_content = `<div>${notice}${content}</div>`
+    $('#js_content').append(digest)
+    const notice = $.html('.share_notice')
+    const content = $.html('#js_share_content')
+    post.msg_content = `<div>${notice}${content}</div>`
   }
 
   // 音频拼接 id
@@ -556,11 +598,11 @@ const extract = async function (html, options = {}) {
       if ((type === 'voice' || type === 'image') && /document\.write/.test(script)) {
         try {
           const code = script
-          .split('.replace')[0]
-          .split('\n')
-          .filter(one => !one.includes('<script') && !one.includes('script>'))
-          .join('\n')
-          .replace('document.write', 'return ') + ')'
+            .split('.replace')[0]
+            .split('\n')
+            .filter(one => !one.includes('<script') && !one.includes('script>'))
+            .join('\n')
+            .replace('document.write', 'return ') + ')'
 
           const fn = new Function(code)
           post.msg_content = post.msg_content.replace(reg, fn())
@@ -574,30 +616,30 @@ const extract = async function (html, options = {}) {
 
   // 避免有换行符
   if (post.msg_content) {
-    post.msg_content = post.msg_content.trim().replace(/\n/g,"<br>")
+    post.msg_content = post.msg_content.trim().replace(/\n/g, "<br>")
   }
 
-  if (!accountId && extra.user_name) {
-    accountId = extra.user_name
+  if (!basic.accountId && extra.user_name) {
+    basic.accountId = extra.user_name
   }
 
-  if (!accountName && extra.nick_name) {
-    accountName = extra.nick_name
+  if (!basic.accountName && extra.nick_name) {
+    basic.accountName = extra.nick_name
   }
 
-  if (!accountAvatar && extra.hd_head_img) {
-    accountAvatar = extra.hd_head_img
+  if (!basic.accountAvatar && extra.hd_head_img) {
+    basic.accountAvatar = extra.hd_head_img
   }
 
   const data = {
-    account_name: accountName,
+    account_name: basic.accountName,
     account_alias: accountAlias,
-    account_avatar: accountAvatar,
+    account_avatar: basic.accountAvatar,
     account_description: accountDesc,
-    account_id: accountId,
-    account_biz: accountBiz,
-    account_biz_number: accountBizNumber,
-    account_qr_code: `https://open.weixin.qq.com/qr/code?username=${accountId || accountAlias}`,
+    account_id: basic.accountId,
+    account_biz: basic.accountBiz,
+    account_biz_number: basic.accountBizNumber,
+    account_qr_code: `https://open.weixin.qq.com/qr/code?username=${basic.accountId || accountAlias}`,
     ...post
   }
 
@@ -638,8 +680,40 @@ const extract = async function (html, options = {}) {
     }
   }
 
-  if (!data.msg_title || !data.msg_publish_time) {
-    return getError(1001)
+  // 链接参数
+  if (!data.msg_mid || !data.msg_link) {
+    let url = null
+    if (options.url && /biz/.test(options.url)) {
+      url = options.url
+    }
+
+    if (!url) {
+      if (rawUrl) {
+        url = rawUrl
+      }
+    }
+
+    if (!url) {
+      url = $("meta[property='og:url']").attr("content")
+    }
+
+    if (url && /^http/.test(url) && /mid/.test(url) && /__biz/.test(url)) {
+      url = url.replace(/&amp;/g, '&')
+      if (!data.msg_link) {
+        data.msg_link = url
+      }
+      if (!data.msg_mid) {
+        data.msg_mid = getParameterByName('mid', url)
+      }
+
+      if (!data.msg_idx) {
+        data.msg_idx = getParameterByName('idx', url)
+      }
+
+      if (!data.msg_sn) {
+        data.msg_sn = getParameterByName('sn', url)
+      }
+    }
   }
 
   // 标题 entities 处理
@@ -656,6 +730,20 @@ const extract = async function (html, options = {}) {
     }
   }
 
+  if (!data.msg_title || !data.msg_publish_time) {
+    return getError(1001)
+  }
+
+  // 文字类型没有内容，使用标题
+  if (type === 'text' && !data.msg_content && data.msg_title) {
+    data.msg_content = data.msg_title
+  }
+
+  // 图片类型时使用图片+文字
+  if (type === 'image') {
+    data.msg_content = `<img src="${data.msg_cover}" style="max-width:100%"/><br>${data.msg_title}`
+  }
+
   return {
     code: 0,
     done: true,
@@ -663,10 +751,10 @@ const extract = async function (html, options = {}) {
   }
 }
 
-function convertHtml (text) {
-  const target =["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&yen;", "¥", "&amp;", "&"]
-  for (var i=0,str=text;i< target.length;i+= 2) {
-    str = str.replace(new RegExp(target[i],'g'),target[i+1])
+function convertHtml(text) {
+  const target = ["&#39;", "'", "&quot;", '"', "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&yen;", "¥", "&amp;", "&"]
+  for (var i = 0, str = text; i < target.length; i += 2) {
+    str = str.replace(new RegExp(target[i], 'g'), target[i + 1])
   }
   return str
 }
