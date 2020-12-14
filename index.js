@@ -352,7 +352,6 @@ const extract = async function(html, options = {}) {
             }\n` + code.join('\n').replace('var d = _g.cgiData;', 'var d = {}') + '\n  return d;'
       let data = {}
       code = `var _g = {};` + code
-      console.log('code', code)
       try {
         code = `var _g = {};` + code
         const fn = new Function(code)
@@ -395,7 +394,7 @@ const extract = async function(html, options = {}) {
         }
 
         // 视频只有标题 + 内容，内容直接从 meta 里取
-        if (type === 'video') {
+        if (type === 'video' || type === 'voice') {
           const description = $("meta[name='description']").attr("content")
           post.msg_content = description
         }
@@ -410,7 +409,6 @@ const extract = async function(html, options = {}) {
           post.raw_data = data
         }
       } catch (e) {
-        console.log(e)
         return getError(1005)
       }
     }
