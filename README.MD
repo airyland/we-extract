@@ -4,7 +4,7 @@
 
 `we-extract` 用以解析微信公众号文章的账号及文章信息，居家旅行、采集微信公众号文章必备工具。
 
-`we-extract` 是微信公众号 RSS 订阅服务 `WeRss` 的核心工具，欢迎使用：
+`we-extract` 是微信公众号 RSS 订阅服务 `WeRss` 的核心解析工具，欢迎使用：
 
 <p align="center">
   <br>
@@ -35,8 +35,8 @@ const rs = await extract('微信文章 url 或者 文章内容')
 
 // 选项
 const rs = await extract('微信文章 url 或者 文章内容', {
-  shouldReturnRawMeta: false, // 是否返回原始的 js 解析结果，一般只用于调试，默认不返回
-  shouldReturnContent: true // 是否返回内容，默认返回
+  shouldReturnContent: true, // 是否返回内容，默认返回
+  shouldExtractMpLinks: false // 是否返回文章中出现的所有公众号文章链接，如果为 true，将返回 mp_links 数组。
 })
 ```
 
@@ -72,7 +72,11 @@ const rs = await extract('微信文章 url 或者 文章内容', {
     msg_article_type: null, // 文章分类
     msg_publish_time: '2018-06-20T10:52:35.000Z', // date 类型
     msg_publish_time_str: '2018/06/20 18:52:35',
-    msg_type: 'post' // 可能为 post repost voice video image
+    msg_type: 'post', // 可能为 post text repost voice video image
+    mp_links: [{ // 在 shouldExtractMpLinks = true 时返回
+      title: '',
+      href: ''
+    }]
   }
 }
 ```
@@ -127,4 +131,3 @@ module.exports = {
 + 如果在搜狗微信搜不到账号，极有可能是因为公众号改了名字，试试以前的名字应该能搜索到。
 + 微信链接的 search 拼接符可能为 `&amp;` 需要做一个替换处理，否则解析链接参数时会有问题。
 + 一个 ip 获取微信文章内容有限制，需要限制速率或者轮换 ip。
-+ 一条临时链接有效期是 6 小时，过期后可以通过微信打开，但是大概 50 天左右也无法在微信打开，会显示系统错误。
