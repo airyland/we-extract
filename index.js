@@ -14,7 +14,8 @@ const video = require('./video')
 const defaultConfig = {
   shouldReturnRawMeta: false,
   shouldReturnContent: true,
-  shouldFollowTransferLink: true
+  shouldFollowTransferLink: true,
+  shouldExtractMpLinks: false
 }
 
 const basic = {}
@@ -37,7 +38,8 @@ const extract = async function(html, options = {}) {
   const {
     shouldReturnRawMeta,
     shouldReturnContent,
-    shouldFollowTransferLink
+    shouldFollowTransferLink,
+    shouldExtractMpLinks
   } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
@@ -740,6 +742,23 @@ const extract = async function(html, options = {}) {
   // 图片类型时使用图片+文字
   if (type === 'image') {
     data.msg_content = `<img src="${data.msg_cover}" style="max-width:100%"/><br>${data.msg_title}`
+  }
+
+  if (shouldExtractMpLinks) {
+    const mpLinks = []
+    const $links = $('a')
+    $links.each((i, ele) => {
+      const $one = $(ele)
+      const href = $one.attr('href')
+      if (href && href.includes('mp.weixin.qq.com')) {
+        mpLinks.push({
+          title: $one.text(),
+          href: href
+        })
+      }
+    })
+    data.mp_links_count = mpLinks.length
+    data.mp_links = mpLinks
   }
 
   return {
