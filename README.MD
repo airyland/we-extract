@@ -36,7 +36,8 @@ const rs = await extract('微信文章 url 或者 文章内容')
 // 选项
 const rs = await extract('微信文章 url 或者 文章内容', {
   shouldReturnContent: true, // 是否返回内容，默认返回
-  shouldExtractMpLinks: false // 是否返回文章中出现的所有公众号文章链接，如果为 true，将返回 mp_links 数组。
+  shouldExtractMpLinks: false, // v2.1.0 是否返回文章中出现的所有公众号文章链接，如果为 true，将返回 mp_links 数组
+  shouldExtractTags: false // v2.2.0 是否解析文章中的收录标签
 })
 ```
 
@@ -76,6 +77,12 @@ const rs = await extract('微信文章 url 或者 文章内容', {
     mp_links: [{ // 在 shouldExtractMpLinks = true 时返回
       title: '',
       href: ''
+    }],
+    tags: [{ // 在 shouldExtractTags = true 时返回
+      id: '',
+      url: '',
+      name: '',
+      count: 1
     }]
   }
 }
