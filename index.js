@@ -15,7 +15,8 @@ const defaultConfig = {
   shouldReturnRawMeta: false,
   shouldReturnContent: true,
   shouldFollowTransferLink: true,
-  shouldExtractMpLinks: false
+  shouldExtractMpLinks: false,
+  shouldExtractTags: false
 }
 
 const basic = {}
@@ -39,7 +40,8 @@ const extract = async function(html, options = {}) {
     shouldReturnRawMeta,
     shouldReturnContent,
     shouldFollowTransferLink,
-    shouldExtractMpLinks
+    shouldExtractMpLinks,
+    shouldExtractTags
   } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
@@ -759,6 +761,32 @@ const extract = async function(html, options = {}) {
     })
     data.mp_links_count = mpLinks.length
     data.mp_links = mpLinks
+  }
+
+  if (shouldExtractTags) {
+    const tags = []
+    const $items = $('.article-tag__item-wrp')
+    if ($items.length) {
+      $items.each((i, ele) => {
+        const $this = $(ele)
+        try {
+          const url = $this.attr('data-url')
+          const name = $this.find('.article-tag__item').text()
+          const count = $this.find('.article-tag__item-num').text()
+          if (name) {
+            tags.push({
+              id: getParameterByName('album_id', url),
+              url,
+              name: name.replace(/^#/, ''),
+              count: count * 1
+            })
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      })
+    }
+    data.tags = tags
   }
 
   return {
