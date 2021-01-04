@@ -3,7 +3,6 @@ const request = require('request-promise')
 const cheerio = require('cheerio')
 const parseUrl = require('./parse-wechat-url')
 const errors = require('./errors')
-const extractProfile = require('./extract-profile')
 const unescape = require('lodash.unescape')
 const {
   getParameterByName
@@ -772,8 +771,14 @@ const extract = async function(html, options = {}) {
         try {
           const url = $this.attr('data-url')
           const name = $this.find('.article-tag__item').text()
-          const count = $this.find('.article-tag__item-num').text()
+          let count = $this.find('.article-tag__item-num').text()
           if (name) {
+            if (!count && $items.length === 1) {
+              const $count = $('.article-tag-card__right')
+              if ($count.length) {
+                count = $count.text().replace('个', '')
+              }
+            }
             tags.push({
               id: getParameterByName('album_id', url),
               url,
@@ -805,6 +810,5 @@ function convertHtml(text) {
 }
 
 module.exports = {
-  extract,
-  extractProfile
+  extract
 }
