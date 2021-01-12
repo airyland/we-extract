@@ -780,7 +780,7 @@ const extract = async function(html, options = {}) {
               }
             }
             tags.push({
-              id: getParameterByName('album_id', url),
+              id: getParameterByName('album_id', url) || getParameterByName('tag_id', url) || null,
               url,
               name: name.replace(/^#/, ''),
               count: count * 1
