@@ -15,7 +15,8 @@ const defaultConfig = {
   shouldReturnContent: true,
   shouldFollowTransferLink: true,
   shouldExtractMpLinks: false,
-  shouldExtractTags: false
+  shouldExtractTags: false,
+  shouldExtractRepostMeta: false
 }
 
 const basic = {}
@@ -40,7 +41,8 @@ const extract = async function(html, options = {}) {
     shouldReturnContent,
     shouldFollowTransferLink,
     shouldExtractMpLinks,
-    shouldExtractTags
+    shouldExtractTags,
+    shouldExtractRepostMeta
   } = Object.assign({}, defaultConfig, options)
 
   let paramType = 'HTML' // 参数为 URL 还是 HTML
@@ -794,6 +796,16 @@ const extract = async function(html, options = {}) {
     data.tags = tags
   }
 
+  if (shouldExtractRepostMeta) {
+    if (html.includes('copyright_info') && html.includes('original_primary_nickname')) {
+      const name = $('.original_primary_nickname').text()
+      if (name) {
+        data.repost_meta = {
+          account_name: name
+        }
+      }
+    }
+  }
   return {
     code: 0,
     done: true,
