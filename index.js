@@ -806,6 +806,11 @@ const extract = async function(html, options = {}) {
       }
     }
   }
+
+  if (data.msg_link.includes('&amp;')) {
+    data.msg_link = data.msg_link.replace(/&amp;/g, '&')
+  }
+
   return {
     code: 0,
     done: true,
