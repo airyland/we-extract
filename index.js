@@ -1,3 +1,4 @@
+const qs = require('qs')
 const dayjs = require('dayjs')
 const request = require('request-promise')
 const cheerio = require('cheerio')
@@ -5,7 +6,8 @@ const parseUrl = require('./parse-wechat-url')
 const errors = require('./errors')
 const unescape = require('lodash.unescape')
 const {
-  getParameterByName
+  getParameterByName,
+  normalizeUrl
 } = require('./util')
 
 const video = require('./video')
@@ -50,7 +52,7 @@ const extract = async function(html, options = {}) {
   let rawUrl = null
 
   if (options.url) {
-    url = options.url
+    url = normalizeUrl(options.url)
   }
 
   let type = 'post'
@@ -65,6 +67,7 @@ const extract = async function(html, options = {}) {
 
   // 支持地址
   if (/^http/.test(html)) {
+    html = normalizeUrl(html)
     if (!/http(s?):\/\/mp.weixin.qq.com/.test(html) && !/http(s?):\/\/weixin.sogou.com/.test(html)) {
       return getError(2009)
     }
@@ -260,6 +263,16 @@ const extract = async function(html, options = {}) {
   for (let i = 0; i < rs.length; i++) {
     const script = rs[i]
 
+    if (type === 'voice' && script.includes('voiceid')) {
+      const lines = script.split(/\n|\r/).filter(one => one.includes('voiceid')).sort((a, b) => a.length > b.length ? -1 : 1)
+      if (lines.length) {
+        const val = lines[0].replace(/'|"|:|voiceid|,/g, '')
+        if (val) {
+          post.msg_source_url = `https://res.wx.qq.com/voice/getvoice?mediaid=${val.trim()}`
+        }
+      }
+    }
+
     if (!extractExtra) {
       // biz
       extraFields.forEach(field => {
@@ -306,7 +319,6 @@ const extract = async function(html, options = {}) {
         post.msg_mid = extra.mid ? extra.mid * 1 : null
       }
     }
-
 
     extraFields.forEach(field => {
       if (!extra[field]) {
@@ -417,7 +429,6 @@ const extract = async function(html, options = {}) {
         return getError(1005)
       }
     }
-
     // 图文
     if ((type === 'post' || type === 'repost') && script.includes('var msg_link = ')) {
       const lines = script.split('\n')
@@ -572,14 +583,6 @@ const extract = async function(html, options = {}) {
     const notice = $.html('.share_notice')
     const content = $.html('#js_share_content')
     post.msg_content = `<div>${notice}${content}</div>`
-  }
-
-  // 音频拼接 id
-  if (type === 'voice') {
-    const rs = html.match(/[\s\S]*?voiceid\s*:\s*['|"](\w+)['|"]/)
-    if (rs && rs[1]) {
-      post.msg_source_url = `https://res.wx.qq.com/voice/getvoice?mediaid=${rs[1]}`
-    }
   }
 
   // 使用图片作为 cover
