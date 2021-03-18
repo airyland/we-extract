@@ -1,6 +1,6 @@
 {
   "name": "we-extract",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "main": "index.js",
   "description": "微信公众号文章元信息解析",
   "keywords": [
@@ -21,5 +21,8 @@
     "lodash.unescape": "^4.0.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1"
   }
 }
