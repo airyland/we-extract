@@ -1,3 +1,5 @@
+const qs = require('qs')
+
 function getParameterByName(name, url = window.location.href) {
   name = name.replace(/[\[\]]/g, '\\$&');
   var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -7,6 +9,13 @@ function getParameterByName(name, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+function normalizeUrl (url = '') {
+  const parts = url.replace(/&amp;/g, '&').split('?')
+  const rs = qs.parse(parts[1])
+  return parts[0] + '?' + qs.stringify(rs)
+}
+
 module.exports = {
-  getParameterByName
+  getParameterByName,
+  normalizeUrl
 }
