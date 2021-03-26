@@ -12,7 +12,12 @@ function getParameterByName(name, url = window.location.href) {
 function normalizeUrl (url = '') {
   const parts = url.replace(/&amp;/g, '&').split('?')
   const rs = qs.parse(parts[1])
-  return parts[0] + '?' + qs.stringify(rs)
+  const querys = qs.stringify(rs)
+  if (querys) {
+    return parts[0] + '?' + querys
+  } else {
+    return parts[0]
+  }
 }
 
 module.exports = {
