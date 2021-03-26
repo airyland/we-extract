@@ -10,7 +10,10 @@ module.exports = function({
 	shouldReturnRawMeta
 }) {
 	const lines = script.split('\n')
-	let code = lines.filter(line => !!line.trim()).filter(line => /d\./.test(line))
+	const lines2 = lines.filter(line => !!line.trim())
+	let code = lines2.filter((line, index) => {
+		return /d\./.test(line) || (lines2[index - 1] && lines2[index - 1].includes('d.') && !line.includes('}'))
+	})
 	code = `var d = {};
             \nfunction getXmlValue (path) {
               return false

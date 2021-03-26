@@ -326,7 +326,7 @@ const extract = async function(html, options = {}) {
         if (reg3.test(script)) {
           try {
             const line = script.split('\n').filter(one => reg3.test(one))
-            const code = `d = {};
+            const code = `d = {}; xml = false;
             \nfunction getXmlValue (path) {
               return false
             }
