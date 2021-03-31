@@ -361,8 +361,8 @@ const extract = async function(html, options = {}) {
     }
 
     if ((type === 'image' || type === 'voice') && script.includes('d.title =')) {
-      const lines = script.split('\n')
-      let code = lines.filter(line => !!line.trim()).filter(line => /d\./.test(line))
+      const lines = script.split(';\n')
+      let code = lines.filter(line => !!line.trim()).filter(line => /d\./.test(line) && !line.includes('}'))
       code = `var d = {};
             \nfunction getXmlValue (path) {
               return false
