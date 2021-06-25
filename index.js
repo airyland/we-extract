@@ -324,17 +324,21 @@ const extract = async function(html, options = {}) {
       if (!extra[field]) {
         const reg3 = new RegExp(`d\.${field}\\s*=`)
         if (reg3.test(script)) {
+          let code
           try {
-            const line = script.split('\n').filter(one => reg3.test(one))
-            const code = `d = {}; xml = false;
-            \nfunction getXmlValue (path) {
-              return false
+            let line = script.split('\n').filter(one => reg3.test(one))
+            if (line.length) {
+              line = line[0]
+              code = `d = {}; xml = false;
+              \nfunction getXmlValue (path) {
+                return false
+              }
+              \n${line} \n return d.${field}`
+              code = code.replace(/;,/g, ';')
+              const fn = new Function(code)
+              extra[field] = fn()
             }
-            \n${line} \n return d.${field}`
-            const fn = new Function(code.replace(/;,/g, ';'))
-            extra[field] = fn()
           } catch (e) {
-            console.log(e)
           }
           if (!extractExtra) {
             extractExtra = true
