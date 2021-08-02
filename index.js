@@ -534,6 +534,14 @@ const extract = async function(html, options = {}) {
     }
   }
 
+  // 转发类型可能 name 没有
+  if (!post.account_name) {
+    let name = $('.account_nickname_inner').text()
+    if (name) {
+      post.account_name = name.trim()
+    }
+  }
+
   post.msg_type = type
 
   // 有可能 ori_head_img_url 不存在，避免被设置成 /132
