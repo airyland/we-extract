@@ -800,7 +800,7 @@ const extract = async function(html, options = {}) {
               id: getParameterByName('album_id', url) || getParameterByName('tag_id', url) || null,
               url,
               name: name.replace(/^#/, ''),
-              count: count * 1
+              count: count.replace(/\D/g,'') * 1
             })
           }
         } catch (e) {
