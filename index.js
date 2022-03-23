@@ -94,21 +94,22 @@ const extract = async function(html, options = {}) {
         }
       })
 
-      if (html.includes('location.replace')) {
-        const rs = html.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi)
-        if (rs && rs[0]) {
-          const code = rs[0].split('\n').filter(one => {
-            return !one.includes('location.replace') && !one.includes('script>')
-          }).join('\n') + '\n return url;'
+      // unknown purpose
+      // if (html.includes('location.replace')) {
+      //   const rs = html.match(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi)
+      //   if (rs && rs[0]) {
+      //     const code = rs[0].split('\n').filter(one => {
+      //       return !one.includes('location.replace') && !one.includes('script>')
+      //     }).join('\n') + '\n return url;'
 
-          try {
-            const fn = new Function(code)
-            return await extract(fn(), options)
-          } catch (e) {
-            return getError(1005)
-          }
-        }
-      }
+      //     try {
+      //       const fn = new Function(code)
+      //       return await extract(fn(), options)
+      //     } catch (e) {
+      //       return getError(1005)
+      //     }
+      //   }
+      // }
     } catch (e) {
       return getError(1002)
     }
