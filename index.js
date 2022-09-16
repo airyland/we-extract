@@ -245,6 +245,7 @@ const extract = async function(html, options = {}) {
     if (info.includes('原创：')) {
       info = info.replace('原创：', '').trim()
     }
+    info = info.replace('\n', '').replace('发表于', '')
     post.msg_author = info.trim()
   }
 
