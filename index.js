@@ -454,7 +454,15 @@ const extract = async function(html, options = {}) {
           protocol: 'https'
         }
       };\nvar document={
-        addEventListener: function () {}
+        addEventListener: function () {},
+        getElementById: function () {
+          return {
+            classList: {
+              remove: function () {},
+              add: function () {}
+            }
+          }
+        }
       };\nvar location={protocol: "https"};\n` + code
 
       let rs = ';var rs = {'
