@@ -465,7 +465,7 @@ const extract = async function(html, options = {}) {
         }
       };\nvar location={protocol: "https"};\n` + code
 
-      let rs = ';var rs = {'
+      let rs = ';\nvar rs = {'
       code.match(/var\s(.*?)\s=/g).map(key => key.split(' ')[1]).forEach(key => {
         if (key !== 'window') {
           rs += `"${key}": typeof ${key} !== 'undefined' ? ${key} : null,`
