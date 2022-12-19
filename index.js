@@ -225,6 +225,20 @@ const extract = async function(html, options = {}) {
   const accountDescPrev = $('#append-account-desc')
   let accountDesc = accountDescPrev.siblings('span').text()
 
+  // 20221218 patch
+  if (!accountDesc) {
+    const $accountDesc = $('.profile_meta_value')
+    if ($accountDesc[1]) {
+      try {
+        const text = $accountDesc[1].children[0].data
+        if (text.length > 10) { // it may go wrong when html is changed
+          accountDesc = text
+        }
+      } catch (e) {
+      }
+    }
+  }
+
   const post = {
     msg_has_copyright: hasCopyright
   }
@@ -238,15 +252,32 @@ const extract = async function(html, options = {}) {
 
   // 作者信息
   let msgAuthor = null
-  const $author = $('.rich_media_meta_text')
-  if ($author.length) {
-    let info = $author.text().trim()
-    //20180622 布局变动
-    if (info.includes('原创：')) {
-      info = info.replace('原创：', '').trim()
+  // const $author = $('.rich_media_meta_text')
+  // if ($author.length) {
+  //   let info = $author.text().trim()
+  //   //20180622 布局变动
+  //   if (info.includes('原创：')) {
+  //     info = info.replace('原创：', '').trim()
+  //   }
+  //   info = info.replace('\n', '').replace('发表于', '')
+  //   post.msg_author = info.trim()
+  // }
+
+  // 20221218 patch
+  // get from meta first
+  try {
+    const text = $("meta[name='author']").attr("content")
+    if (text) {
+      post.msg_author = text
     }
-    info = info.replace('\n', '').replace('发表于', '')
-    post.msg_author = info.trim()
+  } catch (e) {
+    const $author = $('#js_author_name')
+    if ($author.length) {
+      let info = $author.text().trim()
+      if (info.length) {
+        post.msg_author = info
+      }
+    }  
   }
 
   let extractExtra = false
@@ -496,6 +527,25 @@ const extract = async function(html, options = {}) {
         data = fn()
       } catch (e) {
         return getError(1005)
+      }
+
+
+      // 20221218 patch
+      if (!basic.accountBiz) {
+        const reg = new RegExp(`var\\s+biz\\s*=`)
+        const matched = html.split('\n').find(line => reg.test(line) && line.length > 10)
+        if (matched) {
+          const fn = new Function(` ${matched}; return biz; `)
+          try {
+            const rs = fn()
+            if (rs) {
+              basic.accountBiz = rs
+              basic.accountBizNumber = Buffer.from(basic.accountBiz, 'base64').toString() * 1
+            }
+          } catch (e) {
+            console.log('warning', e)
+          }
+        }
       }
 
       const fields = ['msg_title', 'msg_desc', 'msg_link', 'msg_source_url']
