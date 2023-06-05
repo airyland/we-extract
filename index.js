@@ -162,7 +162,13 @@ const extract = async function(html, options = {}) {
   } else if (!html.includes('id="js_content"') && html.includes('参数错误') && html.includes('appmsg/error.html')) {
     return getError(2009)
   } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
-    return getError(1000)
+    // http://mp.weixin.qq.com/s?__biz=MjM5ODIyMTE0MA==&mid=2650971473&idx=1&sn=f529f2a74fac89ed2a8ca8f7a44d93b3&chksm=bd38396a8a4fb07ce4ebab564de2ef01c2d50d60a225328c987cbf66e6167d067bc45f1527d3#rd
+    // 图片类型但是没有 js_content 容器
+    if (html.includes('cover_url')) {
+      type = 'image'
+    } else {
+      return getError(1000)
+    }
   }
 
   html = html.replace('>微信号', ' id="append-account-alias">微信号')
@@ -588,6 +594,18 @@ const extract = async function(html, options = {}) {
     }
   }
 
+  // 获取 .ct
+  if (!post.msg_publish_time) {
+    if (html.includes('.ct')) {
+      const line = html.split('\n').find(one => one.includes('.ct'))
+      const reg = /'(\d+)'/g;
+      const matched = reg.exec(line)
+      if (matched && matched[1].length >= 10) {
+        post.msg_publish_time = new Date(matched[1] * 1000)
+      }
+    }
+  }
+
   // 有可能标题不存在
   if (!post.msg_title) {
     let title = $('.rich_media_title').text()
@@ -661,9 +679,14 @@ const extract = async function(html, options = {}) {
 
   // 使用图片作为 cover
   if (type === 'image' && !post.msg_cover) {
+    // old version
     const image = $('#img_list > img').eq(0).attr('src')
     if (image) {
       post.msg_cover = image
+    }
+
+    if (!post.msg_cover) {
+      post.msg_cover = $("meta[property='og:image']").attr("content")
     }
   }
 
