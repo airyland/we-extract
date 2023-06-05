@@ -157,6 +157,8 @@ const extract = async function(html, options = {}) {
     return getError(2015)
   } else if (html.includes('page_rumor') && !html.includes('id="js_content"')) {
     return getError(2014)
+  } else if (html.includes('投诉类型') && html.includes('冒名侵权')) {
+    return getError(2016)
   } else if (!html.includes('id="js_content"') && html.includes('参数错误') && html.includes('appmsg/error.html')) {
     return getError(2009)
   } else if (!html.includes('id="js_content"') && !html.includes('id=\\"js_content\\"')) {
