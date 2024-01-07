@@ -304,6 +304,25 @@ const extract = async function(html, options = {}) {
   for (let i = 0; i < rs.length; i++) {
     const script = rs[i]
 
+    // image type
+    if (script.includes('picture_page_info_list') && script.includes('https://mmbiz.qpic.cn')) {
+      const lines = script.split('\n')
+      const _script = lines.slice(1, lines.length - 2).join('\n').trim().replace(/^\(function\(\) {/, '')
+      .replace(/}\)\(\);$/, '')
+
+      try {
+        const code = `var x = {}; ${_script} \n return x;`
+        .replace(/window\./g, 'x.')
+        .replace('//g', '/\\n/g')
+        const fn = new Function(code)
+        const result = fn()
+        if (result.picture_page_info_list) {
+          extraFields.picture_page_info_list = result.picture_page_info_list
+        }
+      } catch (e) {
+      }
+    }
+
     if (type === 'voice' && script.includes('voiceid')) {
       const lines = script.split(/\n|\r/).filter(one => one.includes('voiceid')).sort((a, b) => a.length > b.length ? -1 : 1)
       if (lines.length) {
@@ -868,6 +887,7 @@ const extract = async function(html, options = {}) {
   }
 
   // 图片类型时使用图片+文字
+  // deprecated
   if (type === 'image') {
     data.msg_content = `<img src="${data.msg_cover}" style="max-width:100%"/><br>${data.msg_title}`
   }
@@ -934,6 +954,17 @@ const extract = async function(html, options = {}) {
 
   if (data.msg_link && data.msg_link.includes('&amp;')) {
     data.msg_link = data.msg_link.replace(/&amp;/g, '&')
+  }
+
+  // picture_page_info_list = image type
+  // https://mp.weixin.qq.com/s?__biz=MzAxNDQ4MzQzMQ==&mid=2649901351&idx=1&sn=033956c31beea4327b304f43a8ca5b5d&chksm=839443afb4e3cab9466f6a9e7b4752cdcfeac6111a620acff0a68a01bf1331afa987eba65995#rd
+  if (extraFields.picture_page_info_list) {
+    data.msg_type = 'image'
+    data.msg_content = `${data.msg_title}<br>`
+
+    for (const one of extraFields.picture_page_info_list) {
+      data.msg_content += `<img src="${one.cdn_url}" style="max-width:100%"/><br><br>`
+    }
   }
 
   return {
