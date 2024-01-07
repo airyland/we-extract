@@ -401,7 +401,9 @@ const extract = async function(html, options = {}) {
           shouldReturnRawMeta
         })
       } catch (e) {
-        return getError(1005)
+        // skip, there is fallback in the end
+        // console.log('here')
+        // return getError(1005)
       }
     }
 
@@ -734,6 +736,15 @@ const extract = async function(html, options = {}) {
     basic.accountAvatar = extra.hd_head_img
   }
 
+  if (!basic.accountName) {
+    if ($('.wx_follow_nickname')) {
+      const name = $('.wx_follow_nickname').text()
+      if (name) {
+        basic.accountName = name.trim()
+      }
+    }
+  }
+
   const data = {
     account_name: basic.accountName,
     account_alias: accountAlias,
@@ -830,6 +841,20 @@ const extract = async function(html, options = {}) {
       data.msg_content = data.msg_content.replace(/\\x26/g, '&')
       data.msg_content = data.msg_content.replace(/\\x0a/g, '<br/>')
       data.msg_content = convertHtml(data.msg_content)
+    }
+  }
+
+  if (!data.msg_title) {
+    const title = $("meta[property='og:title']").attr("content")
+    if (title) {
+      data.msg_title = title
+    }
+  }
+
+  if (data.msg_content.includes('<script') && data.msg_content.includes('script>') && data.msg_content.includes('nonce=')) {
+    const desc = $("meta[property='og:description']").attr("content")
+    if (desc) {
+      data.msg_content = desc
     }
   }
 

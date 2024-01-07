@@ -70,9 +70,9 @@ const fs = require('fs')
 
   // console.log(sogou)
 
-  const url = fs.readFileSync('./links/20190719002.html', 'utf-8')
+  const url = fs.readFileSync('./links/20240107.html', 'utf-8')
   const postRs = await extract(url, {
-    shouldReturnContent: false
+    shouldReturnContent: true
   })
 
   console.log(postRs)
